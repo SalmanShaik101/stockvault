@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Category } from '@/types';
-import { Sparkles, Dumbbell, Zap, Car, Crown, Cpu, Smile, Laugh } from 'lucide-react';
+import { LayoutGrid, Activity, Flame, Gauge, Gem, Bot, Sparkles, Smile } from 'lucide-react';
 
 interface CategoryFilterBarProps {
   categories: Category[];
@@ -11,14 +11,14 @@ interface CategoryFilterBarProps {
 }
 
 const ICON_MAP: Record<string, React.ElementType> = {
-  Sparkles,
-  Dumbbell,
-  Zap,
-  Car,
-  Crown,
-  Cpu,
-  Smile,
-  Laugh,
+  Sparkles: LayoutGrid,
+  Dumbbell: Activity,
+  Zap: Flame,
+  Car: Gauge,
+  Crown: Gem,
+  Cpu: Bot,
+  Smile: Sparkles,
+  Laugh: Smile,
 };
 
 export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
@@ -31,7 +31,7 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
       <div className="flex items-center gap-2.5 min-w-max">
         {categories.map((cat) => {
           const isSelected = selectedCategory === cat.slug;
-          const IconComponent = ICON_MAP[cat.iconName] || Sparkles;
+          const IconComponent = ICON_MAP[cat.iconName] || LayoutGrid;
 
           return (
             <button
@@ -43,7 +43,7 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
                   : 'bg-white/[0.03] text-zinc-400 border-white/10 hover:border-white/25 hover:text-white hover:bg-white/[0.07]'
               }`}
             >
-              <IconComponent className={`w-3.5 h-3.5 ${isSelected ? 'text-black' : 'text-white'}`} />
+              <IconComponent className={`w-3.5 h-3.5 ${isSelected ? 'text-black' : 'text-white'}`} strokeWidth={1.25} />
               <span>{cat.name}</span>
               <span
                 className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-mono ${

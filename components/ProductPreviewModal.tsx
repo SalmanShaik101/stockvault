@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Product } from '@/types';
-import { X, Download, CheckCircle2, Film, HardDrive, Tag, Sparkles } from 'lucide-react';
+import { X, ArrowDown, Check, Clapperboard, Disc, Tag, Sparkle } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 
 interface ProductPreviewModalProps {
@@ -34,7 +34,7 @@ export const ProductPreviewModal: React.FC<ProductPreviewModalProps> = ({
             onClick={onClose}
             className="p-1.5 rounded-full bg-white/[0.08] hover:bg-white/[0.18] text-zinc-400 hover:text-white transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5" strokeWidth={1.25} />
           </button>
         </div>
 
@@ -54,15 +54,15 @@ export const ProductPreviewModal: React.FC<ProductPreviewModalProps> = ({
             <h2 className="text-xl font-bold text-white mb-2">{product.title}</h2>
             <div className="flex flex-wrap gap-4 text-xs text-zinc-400">
               <span className="flex items-center gap-1">
-                <Film className="w-4 h-4 text-white" />
+                <Clapperboard className="w-4 h-4 text-white" strokeWidth={1.25} />
                 {product.clipCount} Video Clips
               </span>
               <span className="flex items-center gap-1">
-                <HardDrive className="w-4 h-4 text-white" />
+                <Disc className="w-4 h-4 text-white" strokeWidth={1.25} />
                 Size: {product.fileSize}
               </span>
               <span className="flex items-center gap-1">
-                <Sparkles className="w-4 h-4 text-white" />
+                <Sparkle className="w-4 h-4 text-white" strokeWidth={1.25} />
                 Format: {product.format} ({product.resolution})
               </span>
             </div>
@@ -73,19 +73,19 @@ export const ProductPreviewModal: React.FC<ProductPreviewModalProps> = ({
             <h4 className="text-xs font-bold text-white uppercase tracking-wider">Inside This ZIP Bundle:</h4>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-zinc-300">
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                <Check className="w-4 h-4 text-white shrink-0" strokeWidth={1.5} />
                 <span>{product.clipCount}+ High-Bitrate Unwatermarked MP4 Videos</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                <Check className="w-4 h-4 text-white shrink-0" strokeWidth={1.5} />
                 <span>Commercial & Personal Use Rights Included</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                <Check className="w-4 h-4 text-white shrink-0" strokeWidth={1.5} />
                 <span>Organized by subfolders (clips/, license.txt)</span>
               </li>
               <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                <Check className="w-4 h-4 text-white shrink-0" strokeWidth={1.5} />
                 <span>Instant Google Drive API Private Streaming</span>
               </li>
             </ul>
@@ -93,7 +93,7 @@ export const ProductPreviewModal: React.FC<ProductPreviewModalProps> = ({
 
           {/* Tags */}
           <div className="flex flex-wrap items-center gap-1.5 pt-2">
-            <Tag className="w-3.5 h-3.5 text-zinc-500 mr-1" />
+            <Tag className="w-3.5 h-3.5 text-zinc-500 mr-1" strokeWidth={1.25} />
             {product.tags.map((tag) => (
               <span
                 key={tag}
@@ -133,7 +133,7 @@ export const ProductPreviewModal: React.FC<ProductPreviewModalProps> = ({
               }}
               className="glass-button-primary px-6 py-3 rounded-xl text-xs font-bold text-black flex items-center justify-center gap-2 flex-1 sm:flex-none shadow-lg shadow-white/20"
             >
-              <Download className="w-4 h-4 text-black" />
+              <ArrowDown className="w-4 h-4 text-black" strokeWidth={1.5} />
               <span>Buy & Download Now</span>
             </button>
           </div>
