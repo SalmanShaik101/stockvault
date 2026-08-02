@@ -1,23 +1,15 @@
-import { NextResponse } from 'next/server';
-import { MOCK_PRODUCTS } from '@/lib/mockData';
+import { NextRequest } from 'next/server';
+import { productService } from '@/server/services/product.service';
+import { ApiResponse } from '@/server/utils/api-response';
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const category = searchParams.get('category');
+    const category = searchParams.get('category') || undefined;
 
-    let products = MOCK_PRODUCTS;
-
-    if (category && category !== 'all') {
-      products = products.filter((p) => p.category.toLowerCase() === category.toLowerCase());
-    }
-
-    return NextResponse.json({
-      success: true,
-      count: products.length,
-      products,
-    });
+    const products = await productService.getCatalog(category);
+    return ApiResponse.success(products, 'Products retrieved successfully', 200, products.length);
   } catch (error: any) {
-    return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
+    return ApiResponse.error(error.message || 'Failed to fetch products', error.statusCode || 500);
   }
 }

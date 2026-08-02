@@ -1,38 +1,16 @@
-import { NextResponse } from 'next/server';
-import crypto from 'crypto';
+import { NextRequest } from 'next/server';
+import { paymentService } from '@/server/services/payment.service';
+import { ApiResponse } from '@/server/utils/api-response';
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const body = await req.text();
+    const rawBody = await req.text();
     const signature = req.headers.get('x-razorpay-signature');
-    const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
 
-    if (secret && signature) {
-      const expectedSignature = crypto
-        .createHmac('sha256', secret)
-        .update(body)
-        .digest('hex');
-
-      if (expectedSignature !== signature) {
-        return NextResponse.json({ error: 'Invalid webhook signature' }, { status: 400 });
-      }
-    }
-
-    const payload = JSON.parse(body);
-
-    if (payload.event === 'payment.captured') {
-      const payment = payload.payload.payment.entity;
-      const { productId, userId } = payment.notes || {};
-      const razorpayOrderId = payment.order_id;
-      const razorpayPaymentId = payment.id;
-
-      console.log(`Payment Captured: Order ${razorpayOrderId}, Product ${productId}, User ${userId}`);
-      // Write to Firestore 'orders' collection here when Firebase Admin is initialized
-    }
-
-    return NextResponse.json({ status: 'ok' });
+    await paymentService.verifyWebhookAndProcessPayment(rawBody, signature);
+    return ApiResponse.success({ status: 'ok' }, 'Webhook processed successfully');
   } catch (error: any) {
-    console.error('Webhook Error:', error);
-    return NextResponse.json({ error: 'Webhook processing failed' }, { status: 500 });
+    console.error('Razorpay Webhook Error:', error);
+    return ApiResponse.error(error.message || 'Webhook processing error', error.statusCode || 400);
   }
 }

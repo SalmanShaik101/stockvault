@@ -1,58 +1,21 @@
-import { NextResponse } from 'next/server';
-import { MOCK_PRODUCTS } from '@/lib/mockData';
+import { NextRequest } from 'next/server';
+import { paymentService } from '@/server/services/payment.service';
+import { authService } from '@/server/services/auth.service';
+import { ApiResponse } from '@/server/utils/api-response';
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const { productId, userId } = await req.json();
+    const authHeader = req.headers.get('Authorization');
+    const user = await authService.verifyToken(authHeader);
 
-    const product = MOCK_PRODUCTS.find((p) => p.productId === productId || p.id === productId);
-
-    if (!product) {
-      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+    const { productId } = await req.json();
+    if (!productId) {
+      return ApiResponse.error('productId is required', 400);
     }
 
-    const amountInPaise = Math.round(product.price * 100);
-
-    // If Razorpay keys are configured in .env.local, call official Razorpay SDK
-    if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
-      const Razorpay = require('razorpay');
-      const razorpay = new Razorpay({
-        key_id: process.env.RAZORPAY_KEY_ID,
-        key_secret: process.env.RAZORPAY_KEY_SECRET,
-      });
-
-      const razorpayOrder = await razorpay.orders.create({
-        amount: amountInPaise,
-        currency: 'INR',
-        receipt: `receipt_${product.productId}_${Date.now()}`,
-        notes: {
-          productId: product.productId,
-          userId: userId || 'demo_user',
-        },
-      });
-
-      return NextResponse.json({
-        success: true,
-        orderId: razorpayOrder.id,
-        amount: razorpayOrder.amount,
-        currency: razorpayOrder.currency,
-        keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-      });
-    }
-
-    // Fallback Mock Order response for instant testing without keys
-    const mockRazorpayOrderId = `order_mock_${Date.now()}`;
-    return NextResponse.json({
-      success: true,
-      orderId: mockRazorpayOrderId,
-      amount: amountInPaise,
-      currency: 'INR',
-      keyId: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_mockKey123',
-      productTitle: product.title,
-      isMock: true,
-    });
+    const orderData = await paymentService.createRazorpayOrder(productId, user.uid);
+    return ApiResponse.success(orderData, 'Order created successfully', 201);
   } catch (error: any) {
-    console.error('Create Order Error:', error);
-    return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
+    return ApiResponse.error(error.message || 'Failed to create payment order', error.statusCode || 500);
   }
 }

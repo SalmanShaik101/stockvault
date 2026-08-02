@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { MOCK_ORDERS, MOCK_PRODUCTS } from '@/lib/mockData';
+import { authService } from '@/server/services/auth.service';
+import { downloadService } from '@/server/services/download.service';
+import { Readable } from 'stream';
 
 export async function GET(
   req: NextRequest,
@@ -7,65 +9,33 @@ export async function GET(
 ) {
   try {
     const { orderId } = await params;
+    const authHeader = req.headers.get('Authorization');
+    const user = await authService.verifyToken(authHeader);
 
-    // 1. Check order record
-    const order = MOCK_ORDERS.find((o) => o.orderId === orderId || o.id === orderId);
-    
-    // Default to first product if demo test order
-    const product = MOCK_PRODUCTS.find((p) => p.productId === order?.productId) || MOCK_PRODUCTS[0];
+    const ipAddress = req.headers.get('x-forwarded-for') || '127.0.0.1';
+    const userAgent = req.headers.get('user-agent') || 'browser';
 
-    if (!product) {
-      return NextResponse.json({ error: 'Product bundle unavailable' }, { status: 404 });
-    }
-
-    // 2. If Google Drive Service Account key is provided, stream via googleapis SDK
-    if (process.env.GOOGLE_SERVICE_ACCOUNT_KEY && product.driveFileId) {
-      try {
-        const { google } = require('googleapis');
-        const auth = new google.auth.GoogleAuth({
-          credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY),
-          scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-        });
-
-        const drive = google.drive({ version: 'v3', auth });
-        const driveResponse = await drive.files.get(
-          { fileId: product.driveFileId, alt: 'media' },
-          { responseType: 'stream' }
-        );
-
-        const headers = new Headers();
-        headers.set('Content-Type', 'application/zip');
-        headers.set(
-          'Content-Disposition',
-          `attachment; filename="${product.slug || 'stock-bundle'}.zip"`
-        );
-
-        return new NextResponse(driveResponse.data as any, { headers });
-      } catch (gErr: any) {
-        console.error('Google Drive Stream Error:', gErr);
-      }
-    }
-
-    // 3. Demo Mode Fallback Stream
-    const demoZipContent = `StockVault Digital Media Bundle Download
-Product ID: ${product.productId}
-Bundle Title: ${product.title}
-File Count: ${product.clipCount} Clips
-Resolution: ${product.resolution}
-Google Drive File ID (Stored in DB): ${product.driveFileId}
-
-Thank you for your purchase! To link live downloads, configure GOOGLE_SERVICE_ACCOUNT_KEY in .env.local`;
+    const { stream, product } = await downloadService.processDownloadStream(
+      orderId,
+      user.uid,
+      ipAddress,
+      userAgent
+    );
 
     const headers = new Headers();
     headers.set('Content-Type', 'application/zip');
     headers.set(
       'Content-Disposition',
-      `attachment; filename="${product.slug || 'stock-bundle'}-DEMO.zip"`
+      `attachment; filename="${product.slug || 'stock-bundle'}.zip"`
     );
 
-    return new NextResponse(demoZipContent, { headers });
+    if (typeof stream === 'string') {
+      return new NextResponse(stream, { headers });
+    }
+
+    return new NextResponse(stream as any, { headers });
   } catch (error: any) {
-    console.error('Download API Error:', error);
-    return NextResponse.json({ error: 'Failed to initiate download' }, { status: 500 });
+    console.error('Download Stream Route Error:', error);
+    return NextResponse.json({ error: error.message || 'Download failed' }, { status: error.statusCode || 500 });
   }
 }
