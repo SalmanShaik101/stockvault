@@ -6,23 +6,23 @@ import { Sparkles, ShieldCheck, Zap, Download, Layers } from 'lucide-react';
 export const HeroSection: React.FC = () => {
   return (
     <section className="relative pt-12 pb-16 overflow-hidden">
-      {/* Background Decorative Radial Glows */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-indigo-600/15 blur-[120px] rounded-full pointer-events-none" />
+      {/* Subtle Specular Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-white/[0.03] blur-[100px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         
-        {/* Top Feature Pill */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-6 backdrop-blur-md">
+        {/* Top Pill */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/20 text-white text-xs font-semibold mb-6 backdrop-blur-sm">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Curated 5TB High-Definition Stock Vault</span>
-          <span className="w-1 h-1 rounded-full bg-indigo-400" />
-          <span className="text-white">9:16 Vertical & 16:9 4K Clips</span>
+          <span>Curated 5TB Digital Stock Vault</span>
+          <span className="w-1 h-1 rounded-full bg-zinc-400" />
+          <span className="text-zinc-300">Monochrome Glass Edition</span>
         </div>
 
         {/* Hero Title */}
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-[1.1] mb-6">
           Premium HD Video Bundles <br className="hidden sm:inline" />
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-indigo-300 to-indigo-500">
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-zinc-200 to-zinc-400">
             For Viral Creators & Editors
           </span>
         </h1>
@@ -36,7 +36,7 @@ export const HeroSection: React.FC = () => {
         <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
           <a
             href="#catalog"
-            className="glass-button-primary px-7 py-3.5 rounded-2xl text-sm font-bold text-white flex items-center gap-2"
+            className="glass-button-primary px-7 py-3.5 rounded-2xl text-sm font-bold text-black flex items-center gap-2"
           >
             <Download className="w-4 h-4" />
             <span>Explore Catalog (10,000+ Clips)</span>
@@ -44,30 +44,30 @@ export const HeroSection: React.FC = () => {
 
           <a
             href="#pricing"
-            className="px-7 py-3.5 rounded-2xl text-sm font-bold text-zinc-300 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 transition-all flex items-center gap-2"
+            className="px-7 py-3.5 rounded-2xl text-sm font-bold text-white bg-white/[0.05] hover:bg-white/[0.1] border border-white/20 hover:border-white/40 transition-all flex items-center gap-2"
           >
-            <Zap className="w-4 h-4 text-indigo-400" />
+            <Zap className="w-4 h-4 text-white" />
             <span>Unlimited Pass ₹299/mo</span>
           </a>
         </div>
 
         {/* Trust Badges */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto pt-6 border-t border-white/10 text-xs font-medium text-zinc-400">
-          <div className="flex items-center justify-center gap-2 p-2 rounded-xl bg-white/[0.02]">
-            <ShieldCheck className="w-4 h-4 text-indigo-400" />
+          <div className="flex items-center justify-center gap-2 p-2 rounded-xl bg-white/[0.02] border border-white/5">
+            <ShieldCheck className="w-4 h-4 text-white" />
             <span>Instant Zip Downloads</span>
           </div>
-          <div className="flex items-center justify-center gap-2 p-2 rounded-xl bg-white/[0.02]">
-            <Zap className="w-4 h-4 text-indigo-400" />
+          <div className="flex items-center justify-center gap-2 p-2 rounded-xl bg-white/[0.02] border border-white/5">
+            <Zap className="w-4 h-4 text-white" />
             <span>Direct Google Drive API</span>
           </div>
-          <div className="flex items-center justify-center gap-2 p-2 rounded-xl bg-white/[0.02]">
-            <Layers className="w-4 h-4 text-indigo-400" />
+          <div className="flex items-center justify-center gap-2 p-2 rounded-xl bg-white/[0.02] border border-white/5">
+            <Layers className="w-4 h-4 text-white" />
             <span>Commercial Use License</span>
           </div>
-          <div className="flex items-center justify-center gap-2 p-2 rounded-xl bg-white/[0.02]">
-            <Sparkles className="w-4 h-4 text-indigo-400" />
-            <span>No Recurring Watermarks</span>
+          <div className="flex items-center justify-center gap-2 p-2 rounded-xl bg-white/[0.02] border border-white/5">
+            <Sparkles className="w-4 h-4 text-white" />
+            <span>No Watermarks</span>
           </div>
         </div>
 

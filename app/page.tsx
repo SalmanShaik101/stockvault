@@ -9,8 +9,7 @@ import { ProductPreviewModal } from '@/components/ProductPreviewModal';
 import { Footer } from '@/components/Footer';
 import { MOCK_CATEGORIES, MOCK_PRODUCTS } from '@/lib/mockData';
 import { Product } from '@/types';
-import { Sparkles, Check, Download, Zap, HelpCircle } from 'lucide-react';
-import { formatCurrency } from '@/lib/utils';
+import { Sparkles, Check, HelpCircle } from 'lucide-react';
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -27,7 +26,6 @@ export default function Home() {
     setPurchasingProduct(product);
     
     try {
-      // Call create-order API
       const res = await fetch('/api/payments/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -36,7 +34,6 @@ export default function Home() {
       const data = await res.json();
 
       if (data.success) {
-        // Trigger download simulation or Razorpay modal
         setToastMessage(`🎉 Order initialized! Direct download for "${product.title}" is starting...`);
         
         setTimeout(() => {
@@ -52,7 +49,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#09090b]">
+    <div className="min-h-screen flex flex-col bg-[#050507]">
       <Navbar />
 
       {/* Hero Banner */}
@@ -65,8 +62,8 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
           <div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-2">
-              <span>Browse Stock Bundles</span>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-mono">
+              <span>Browse Stock Vaults</span>
+              <span className="text-xs px-2.5 py-1 rounded-full bg-white/10 text-white border border-white/20 font-mono">
                 {filteredProducts.length} Vaults Available
               </span>
             </h2>
@@ -96,18 +93,18 @@ export default function Home() {
 
         {/* Membership Pricing Section */}
         <section id="pricing" className="pt-16 pb-8">
-          <div className="glass-panel rounded-3xl p-8 sm:p-12 relative overflow-hidden border border-indigo-500/30">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/20 blur-[100px] rounded-full pointer-events-none" />
+          <div className="glass-panel rounded-3xl p-8 sm:p-12 relative overflow-hidden border border-white/20">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-white/[0.03] blur-[100px] rounded-full pointer-events-none" />
 
             <div className="max-w-3xl mx-auto text-center space-y-6">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 text-white text-xs font-bold border border-white/20">
                 <Sparkles className="w-3.5 h-3.5" />
                 STOCKVAULT UNLIMITED ACCESS
               </span>
 
               <h2 className="text-3xl sm:text-5xl font-black text-white">
                 Download Everything For <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-indigo-200">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-400">
                   Just ₹299 / Month
                 </span>
               </h2>
@@ -117,16 +114,16 @@ export default function Home() {
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left max-w-2xl mx-auto text-xs text-zinc-300 pt-4">
-                <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.03]">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.03] border border-white/10">
+                  <Check className="w-4 h-4 text-white shrink-0" />
                   <span>Unlimited 5TB Bundle Access</span>
                 </div>
-                <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.03]">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.03] border border-white/10">
+                  <Check className="w-4 h-4 text-white shrink-0" />
                   <span>Google Drive Direct High-Speed</span>
                 </div>
-                <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.03]">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.03] border border-white/10">
+                  <Check className="w-4 h-4 text-white shrink-0" />
                   <span>Commercial Reseller License</span>
                 </div>
               </div>
@@ -134,7 +131,7 @@ export default function Home() {
               <div className="pt-4">
                 <button
                   onClick={() => handleBuyNow(MOCK_PRODUCTS[0])}
-                  className="glass-button-primary px-8 py-4 rounded-2xl text-sm font-bold text-white shadow-xl shadow-indigo-600/40 hover:scale-105 transition-all"
+                  className="glass-button-primary px-8 py-4 rounded-2xl text-sm font-bold text-black hover:scale-105 transition-all"
                 >
                   Start Unlimited Pass — ₹299/mo
                 </button>
@@ -148,7 +145,7 @@ export default function Home() {
           <div className="max-w-3xl mx-auto space-y-6">
             <div className="text-center space-y-2">
               <h3 className="text-2xl font-bold text-white flex items-center justify-center gap-2">
-                <HelpCircle className="w-5 h-5 text-indigo-400" />
+                <HelpCircle className="w-5 h-5 text-white" />
                 Frequently Asked Questions
               </h3>
               <p className="text-xs text-zinc-400">Everything you need to know about purchasing and downloading stock bundles.</p>
@@ -190,7 +187,7 @@ export default function Home() {
 
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-2xl bg-indigo-950/90 border border-indigo-500/40 text-white text-xs font-semibold shadow-2xl backdrop-blur-xl animate-bounce">
+        <div className="fixed bottom-6 right-6 z-50 px-5 py-3 rounded-2xl bg-zinc-900 border border-white/20 text-white text-xs font-semibold shadow-2xl backdrop-blur-md animate-bounce">
           {toastMessage}
         </div>
       )}
