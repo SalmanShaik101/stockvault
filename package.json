@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "pages:build": "npx @cloudflare/next-on-pages@1 --legacy-peer-deps",
     "start": "next start",
     "lint": "eslint"
   },
@@ -28,7 +27,6 @@
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.16",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -36,7 +34,6 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
     "tailwindcss": "^4",
-    "typescript": "^5",
-    "wrangler": "^4.118.0"
+    "typescript": "^5"
   }
 }
