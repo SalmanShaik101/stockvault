@@ -1,14 +1,15 @@
 import { getRazorpayClient } from '@/server/config/razorpay.config';
 import { orderRepository } from '@/server/repositories/order.repository';
 import { productRepository } from '@/server/repositories/product.repository';
+import { libraryRepository } from '@/server/repositories/library.repository';
 import { auditRepository } from '@/server/repositories/audit.repository';
-import { OrderDocument } from '@/server/types/models.types';
-import { AppError, NotFoundError, ValidationError } from '@/server/utils/custom-errors';
+import { OrderRecord } from '@/server/types/supabase.types';
+import { NotFoundError, ValidationError } from '@/server/utils/custom-errors';
 import crypto from 'crypto';
 
 export class PaymentService {
   async createRazorpayOrder(productId: string, userId: string): Promise<{ orderId: string; amount: number; currency: string; keyId: string }> {
-    const product = await productRepository.findByProductId(productId);
+    const product = await productRepository.findBySlugOrId(productId);
     if (!product || !product.active) {
       throw new NotFoundError('Product is unavailable for purchase');
     }
@@ -20,9 +21,9 @@ export class PaymentService {
       const order = await razorpay.orders.create({
         amount: amountInPaise,
         currency: 'INR',
-        receipt: `receipt_${productId}_${Date.now()}`,
+        receipt: `receipt_${product.id}_${Date.now()}`,
         notes: {
-          productId,
+          productId: product.id,
           userId,
         },
       });
@@ -69,23 +70,21 @@ export class PaymentService {
 
       const existingOrder = await orderRepository.findByOrderId(`ord_${razorpayPaymentId}`);
       if (!existingOrder) {
-        const orderDoc: OrderDocument = {
-          orderId: `ord_${razorpayPaymentId}`,
-          userId: userId || 'usr_demo_123',
-          productId: productId || 'GYM001',
-          paymentStatus: 'SUCCESS',
-          paymentGateway: 'RAZORPAY',
-          paymentId: razorpayPaymentId,
-          razorpayOrderId,
+        const orderRecord: Partial<OrderRecord> = {
+          order_id: `ord_${razorpayPaymentId}`,
+          user_id: userId || 'usr_demo_123',
+          product_id: productId || 'GYM001',
+          status: 'SUCCESS',
+          payment_gateway: 'RAZORPAY',
+          payment_id: razorpayPaymentId,
+          razorpay_order_id: razorpayOrderId,
           amount: payment.amount / 100,
           currency: 'INR',
-          purchaseDate: new Date().toISOString(),
-          downloadCount: 0,
         };
 
-        await orderRepository.create(orderDoc);
-        await productRepository.incrementDownloadCount(orderDoc.productId);
-        await auditRepository.logAction('PAYMENT_WEBHOOK_PROCESSED', { orderId: orderDoc.orderId, amount: orderDoc.amount });
+        const createdOrder = await orderRepository.create(orderRecord);
+        await libraryRepository.addToLibrary(orderRecord.user_id!, orderRecord.product_id!, createdOrder.id);
+        await auditRepository.logAction('PAYMENT_WEBHOOK_PROCESSED', { orderId: createdOrder.order_id, amount: createdOrder.amount });
       }
     }
   }

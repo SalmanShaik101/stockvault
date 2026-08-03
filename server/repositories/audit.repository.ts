@@ -1,21 +1,22 @@
-import { adminDb } from '@/server/config/firebase-admin.config';
-import { ActivityLogDocument } from '@/server/types/models.types';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+import { AuditLogRecord } from '@/server/types/supabase.types';
 
 export class AuditRepository {
-  private collection = adminDb.collection('activity_logs');
-
-  async logAction(action: string, details: Record<string, any>, userId: string | null = null, ipAddress: string = '127.0.0.1'): Promise<void> {
+  async logAction(
+    action: string,
+    details: Record<string, any> = {},
+    userId: string | null = null,
+    ipAddress: string | null = null
+  ): Promise<void> {
     try {
-      const docRef = this.collection.doc();
-      const log: ActivityLogDocument = {
-        id: docRef.id,
-        userId,
+      const record: Partial<AuditLogRecord> = {
+        user_id: userId,
         action,
         details,
-        ipAddress,
+        ip_address: ipAddress,
         timestamp: new Date().toISOString(),
       };
-      await docRef.set(log);
+      await supabaseAdmin.from('audit_logs').insert(record);
     } catch (err) {
       console.error('Audit Log Error:', err);
     }

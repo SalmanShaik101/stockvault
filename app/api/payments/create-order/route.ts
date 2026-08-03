@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       return ApiResponse.error('productId is required', 400);
     }
 
-    const orderData = await paymentService.createRazorpayOrder(productId, user.uid);
+    const orderData = await paymentService.createRazorpayOrder(productId, user.id);
     return ApiResponse.success(orderData, 'Order created successfully', 201);
   } catch (error: any) {
     return ApiResponse.error(error.message || 'Failed to create payment order', error.statusCode || 500);

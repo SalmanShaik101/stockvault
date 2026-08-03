@@ -6,10 +6,11 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const category = searchParams.get('category') || undefined;
+    const q = searchParams.get('q') || searchParams.get('search') || undefined;
 
-    const products = await productService.getCatalog(category);
-    return ApiResponse.success(products, 'Products retrieved successfully', 200, products.length);
+    const products = await productService.getCatalog(category, q);
+    return ApiResponse.success(products, 'Catalog retrieved successfully', 200, products.length);
   } catch (error: any) {
-    return ApiResponse.error(error.message || 'Failed to fetch products', error.statusCode || 500);
+    return ApiResponse.error(error.message || 'Failed to fetch catalog', error.statusCode || 500);
   }
 }

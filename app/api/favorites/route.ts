@@ -8,10 +8,10 @@ export async function GET(req: NextRequest) {
     const authHeader = req.headers.get('Authorization');
     const user = await authService.verifyToken(authHeader);
 
-    const wishlist = await favoriteRepository.getUserFavorites(user.id);
-    return ApiResponse.success(wishlist);
+    const favorites = await favoriteRepository.getUserFavorites(user.id);
+    return ApiResponse.success(favorites);
   } catch (error: any) {
-    return ApiResponse.error(error.message || 'Failed to fetch wishlist', error.statusCode || 500);
+    return ApiResponse.error(error.message || 'Failed to fetch favorites', error.statusCode || 500);
   }
 }
 
@@ -21,10 +21,10 @@ export async function POST(req: NextRequest) {
     const user = await authService.verifyToken(authHeader);
     const { productId } = await req.json();
 
-    const item = await favoriteRepository.addFavorite(user.id, productId);
-    return ApiResponse.success(item, 'Item added to wishlist', 201);
+    const favorite = await favoriteRepository.addFavorite(user.id, productId);
+    return ApiResponse.success(favorite, 'Product added to favorites', 201);
   } catch (error: any) {
-    return ApiResponse.error(error.message || 'Failed to add item to wishlist', error.statusCode || 500);
+    return ApiResponse.error(error.message || 'Failed to add favorite', error.statusCode || 500);
   }
 }
 
@@ -35,8 +35,8 @@ export async function DELETE(req: NextRequest) {
     const { productId } = await req.json();
 
     await favoriteRepository.removeFavorite(user.id, productId);
-    return ApiResponse.success({ status: 'removed' }, 'Item removed from wishlist');
+    return ApiResponse.success({ status: 'removed' }, 'Product removed from favorites');
   } catch (error: any) {
-    return ApiResponse.error(error.message || 'Failed to remove item from wishlist', error.statusCode || 500);
+    return ApiResponse.error(error.message || 'Failed to remove favorite', error.statusCode || 500);
   }
 }

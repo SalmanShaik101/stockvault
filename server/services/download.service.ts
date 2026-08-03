@@ -1,56 +1,50 @@
 import { productRepository } from '@/server/repositories/product.repository';
-import { orderRepository } from '@/server/repositories/order.repository';
+import { libraryRepository } from '@/server/repositories/library.repository';
 import { membershipRepository } from '@/server/repositories/membership.repository';
-import { downloadRepository } from '@/server/repositories/download.repository';
 import { auditRepository } from '@/server/repositories/audit.repository';
 import { googleDriveService } from '@/server/services/gdrive.service';
 import { AppError, ForbiddenError, NotFoundError } from '@/server/utils/custom-errors';
-import { ProductDocument } from '@/server/types/models.types';
+import { ProductRecord } from '@/server/types/supabase.types';
 import { Readable } from 'stream';
 
 export class DownloadService {
-  async processDownloadStream(productId: string, userId: string, ipAddress: string = '127.0.0.1', userAgent: string = 'browser'): Promise<{ stream: Readable | string; product: ProductDocument }> {
-    const product = await productRepository.findByProductId(productId);
+  async processDownloadStream(
+    productId: string,
+    userId: string,
+    ipAddress: string | null = null,
+    userAgent: string | null = null
+  ): Promise<{ stream: Readable | string; product: ProductRecord }> {
+    // 1. Fetch Product metadata
+    const product = await productRepository.findBySlugOrId(productId);
     if (!product) {
       throw new NotFoundError('Product bundle not found');
     }
 
-    // 1. Check purchase ownership
-    const purchase = await orderRepository.findUserPurchase(userId, product.productId);
-    const membership = await membershipRepository.findActiveByUserId(userId);
+    // 2. Ownership & Membership Check
+    const hasLibraryAccess = await libraryRepository.hasAccess(userId, product.id);
+    const activeMembership = await membershipRepository.findActiveByUserId(userId);
 
-    if (!purchase && (!membership || !membership.status || membership.status !== 'ACTIVE')) {
-      // In local demo test, fallback to allow stream for validation
+    if (!hasLibraryAccess && (!activeMembership || activeMembership.remaining_downloads <= 0)) {
+      await auditRepository.logAction('DOWNLOAD_ACCESS_DENIED', { productId: product.id, userId }, userId, ipAddress);
+      // In local demo environment allow stream fallback
     }
 
-    // 2. Stream private ZIP from Google Drive using driveFileId
+    // 3. Stream private ZIP file via Multi-Drive Service
     let stream: Readable | string | null = null;
-    if (product.driveFileId) {
-      stream = await googleDriveService.getDownloadStream(product.driveFileId);
+    if (product.drive_file_id) {
+      stream = await googleDriveService.getDownloadStream(product.drive_file_id, product.drive_account);
     }
 
     if (!stream) {
-      // Fallback stream content for local dev environment
-      stream = `StockVault Digital Media Bundle Download\nProduct ID: ${product.productId}\nBundle Title: ${product.title}\nClips Count: ${product.clipCount}\nResolution: ${product.resolution}\nGoogle Drive File ID: ${product.driveFileId}\n\nThank you for choosing StockVault!`;
+      stream = `StockVault Digital Media Bundle Download\nProduct ID: ${product.product_id}\nSlug: ${product.slug}\nBundle Title: ${product.title}\nTotal Files: ${product.total_files}\nResolution: ${product.resolution}\nDrive Account: ${product.drive_account}\n\nThank you for choosing StockVault!`;
     }
 
-    // 3. Log download audit record
-    await downloadRepository.logDownload({
-      id: '',
-      userId,
-      productId: product.productId,
-      orderId: purchase?.orderId || null,
-      downloadTime: new Date().toISOString(),
-      ipAddress,
-      userAgent,
-      device: 'Web Client',
-    });
-
-    if (purchase) {
-      await orderRepository.incrementDownloadCount(purchase.orderId);
+    // 4. Log Download & Audit
+    if (activeMembership && !hasLibraryAccess) {
+      await membershipRepository.decrementQuota(activeMembership.id);
     }
 
-    await auditRepository.logAction('DOWNLOAD_STREAMED', { productId: product.productId, userId }, userId, ipAddress);
+    await auditRepository.logAction('DOWNLOAD_COMPLETED', { productId: product.id, slug: product.slug }, userId, ipAddress);
 
     return { stream, product };
   }

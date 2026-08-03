@@ -1,64 +1,129 @@
-import { adminDb } from '@/server/config/firebase-admin.config';
-import { ProductDocument } from '@/server/types/models.types';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+import { ProductRecord } from '@/server/types/supabase.types';
 import { MOCK_PRODUCTS } from '@/lib/mockData';
 
 export class ProductRepository {
-  private collection = adminDb.collection('products');
-
-  async findByProductId(productId: string): Promise<ProductDocument | null> {
+  async findBySlugOrId(identifier: string): Promise<ProductRecord | null> {
     try {
-      const doc = await this.collection.doc(productId).get();
-      if (doc.exists) {
-        return doc.data() as ProductDocument;
-      }
-    } catch (err) {
-      // Fallback to mock data store
+      const { data } = await supabaseAdmin
+        .from('products')
+        .select('*')
+        .or(`slug.eq.${identifier},product_id.eq.${identifier},id.eq.${identifier}`)
+        .single();
+
+      if (data) return data as ProductRecord;
+    } catch (err) {}
+
+    // Fallback to mock data store
+    const mock = MOCK_PRODUCTS.find((p) => p.productId === identifier || p.id === identifier);
+    if (mock) {
+      const m = mock as any;
+      return {
+        id: m.id || m.productId,
+        product_id: m.productId,
+        title: m.title,
+        slug: m.productId.toLowerCase(),
+        description: m.description || m.desc || `High quality ${m.category} stock video bundle with unwatermarked 4K and 9:16 footage.`,
+        price: m.price,
+        original_price: m.originalPrice,
+        category: m.category,
+        thumbnail_url: m.thumbnailUrl,
+        preview_url: m.previewVideoUrl,
+        drive_file_id: m.driveFileId,
+        drive_account: m.driveAccountId || 'drive_acc_01',
+        folder_name: m.category,
+        total_files: m.clipCount || 500,
+        zip_size: m.fileSize || '3.5 GB',
+        downloads: m.downloadCount || 0,
+        views: 120,
+        sales: m.downloadCount || 0,
+        favorites: 45,
+        resolution: m.resolution || '1080x1920',
+        aspect_ratio: m.aspectRatio || '9:16',
+        format: m.format || 'MP4',
+        tags: m.tags || [m.category],
+        active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
     }
-    const mock = MOCK_PRODUCTS.find((p) => p.productId === productId || p.id === productId);
-    return mock ? (mock as unknown as ProductDocument) : null;
+
+    return null;
   }
 
-  async listProducts(category?: string): Promise<ProductDocument[]> {
+  async listProducts(category?: string, searchQuery?: string): Promise<ProductRecord[]> {
     try {
-      let query: FirebaseFirestore.Query = this.collection.where('active', '==', true);
-      if (category && category !== 'all') {
-        query = query.where('category', '==', category.toLowerCase());
-      }
-      const snapshot = await query.get();
-      if (!snapshot.empty) {
-        return snapshot.docs.map((doc) => doc.data() as ProductDocument);
-      }
-    } catch (err) {
-      // Fallback
-    }
+      let query = supabaseAdmin.from('products').select('*').eq('active', true);
 
-    let products = MOCK_PRODUCTS as unknown as ProductDocument[];
+      if (category && category !== 'all') {
+        query = query.eq('category', category.toLowerCase());
+      }
+
+      if (searchQuery) {
+        query = query.textSearch('fts', searchQuery, { config: 'english' });
+      }
+
+      const { data, error } = await query;
+      if (!error && data && data.length > 0) {
+        return data as ProductRecord[];
+      }
+    } catch (err) {}
+
+    // Fallback
+    let products = MOCK_PRODUCTS.map((m: any) => ({
+      id: m.id || m.productId,
+      product_id: m.productId,
+      title: m.title,
+      slug: m.productId.toLowerCase(),
+      description: m.description || m.desc || `High quality ${m.category} stock video bundle with unwatermarked 4K and 9:16 footage.`,
+      price: m.price,
+      original_price: m.originalPrice,
+      category: m.category,
+      thumbnail_url: m.thumbnailUrl,
+      preview_url: m.previewVideoUrl,
+      drive_file_id: m.driveFileId,
+      drive_account: m.driveAccountId || 'drive_acc_01',
+      folder_name: m.category,
+      total_files: m.clipCount || 500,
+      zip_size: m.fileSize || '3.5 GB',
+      downloads: m.downloadCount || 0,
+      views: 120,
+      sales: m.downloadCount || 0,
+      favorites: 45,
+      resolution: m.resolution || '1080x1920',
+      aspect_ratio: m.aspectRatio || '9:16',
+      format: m.format || 'MP4',
+      tags: m.tags || [m.category],
+      active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    }));
+
     if (category && category !== 'all') {
       products = products.filter((p) => p.category.toLowerCase() === category.toLowerCase());
     }
+
     return products;
   }
 
-  async create(product: ProductDocument): Promise<ProductDocument> {
-    await this.collection.doc(product.productId).set(product);
-    return product;
-  }
+  async create(product: Partial<ProductRecord>): Promise<ProductRecord> {
+    const { data, error } = await supabaseAdmin
+      .from('products')
+      .insert(product)
+      .select()
+      .single();
 
-  async update(productId: string, data: Partial<ProductDocument>): Promise<void> {
-    await this.collection.doc(productId).update({
-      ...data,
-      updatedAt: new Date().toISOString(),
-    });
-  }
-
-  async incrementDownloadCount(productId: string): Promise<void> {
-    try {
-      await this.collection.doc(productId).update({
-        downloadCount: FirebaseFirestore.FieldValue.increment(1),
-      });
-    } catch (err) {
-      // Ignore if document not in live Firestore
+    if (error) {
+      console.error('Error creating product in Supabase:', error);
+      return product as ProductRecord;
     }
+    return data as ProductRecord;
+  }
+
+  async incrementViews(productId: string): Promise<void> {
+    try {
+      await supabaseAdmin.rpc('increment_product_views', { p_id: productId });
+    } catch (err) {}
   }
 }
 

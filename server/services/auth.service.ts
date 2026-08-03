@@ -1,67 +1,55 @@
-import { adminAuth } from '@/server/config/firebase-admin.config';
-import { userRepository } from '@/server/repositories/user.repository';
-import { UserDocument } from '@/server/types/models.types';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+import { profileRepository } from '@/server/repositories/profile.repository';
+import { ProfileRecord } from '@/server/types/supabase.types';
 import { UnauthorizedError } from '@/server/utils/custom-errors';
 
 export class AuthService {
-  async verifyToken(authHeader: string | null): Promise<UserDocument> {
+  async verifyToken(authHeader: string | null): Promise<ProfileRecord> {
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      // For local development testing before JWT is passed
+      // Demo Customer Fallback
       return {
-        uid: 'usr_demo_123',
-        name: 'Demo Customer',
+        id: 'usr_demo_123',
         email: 'customer@example.com',
-        photoURL: null,
+        full_name: 'Demo Customer',
+        avatar_url: null,
         role: 'USER',
-        membership: {
-          planId: null,
-          active: false,
-          startDate: null,
-          expiryDate: null,
-          remainingDownloads: 0,
-        },
-        joinedDate: new Date().toISOString(),
-        lastLogin: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+        last_login: new Date().toISOString(),
       };
     }
 
     const token = authHeader.split('Bearer ')[1];
     try {
-      const decodedToken = await adminAuth.verifyIdToken(token);
-      let user = await userRepository.findByUid(decodedToken.uid);
-
-      if (!user) {
-        user = {
-          uid: decodedToken.uid,
-          name: decodedToken.name || decodedToken.email?.split('@')[0] || 'User',
-          email: decodedToken.email || '',
-          photoURL: decodedToken.picture || null,
-          role: (decodedToken.role as any) || 'USER',
-          membership: {
-            planId: null,
-            active: false,
-            startDate: null,
-            expiryDate: null,
-            remainingDownloads: 0,
-          },
-          joinedDate: new Date().toISOString(),
-          lastLogin: new Date().toISOString(),
-        };
-        await userRepository.create(user);
-      } else {
-        await userRepository.updateLastLogin(user.uid);
+      const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
+      if (error || !user) {
+        throw new UnauthorizedError('Invalid or expired Supabase token');
       }
 
-      return user;
+      let profile = await profileRepository.findById(user.id);
+      if (!profile) {
+        profile = {
+          id: user.id,
+          email: user.email || '',
+          full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
+          avatar_url: user.user_metadata?.avatar_url || null,
+          role: (user.user_metadata?.role as any) || 'USER',
+          created_at: new Date().toISOString(),
+          last_login: new Date().toISOString(),
+        };
+        await profileRepository.upsertProfile(profile);
+      } else {
+        await profileRepository.updateLastLogin(user.id);
+      }
+
+      return profile;
     } catch (error) {
-      throw new UnauthorizedError('Invalid or expired authentication token');
+      throw new UnauthorizedError('Authentication failed');
     }
   }
 
-  async verifyAdminToken(authHeader: string | null): Promise<UserDocument> {
-    const user = await this.verifyToken(authHeader);
-    // Allow admin access if user role is ADMIN or if token header is present in dev
-    return user;
+  async verifyAdminToken(authHeader: string | null): Promise<ProfileRecord> {
+    const profile = await this.verifyToken(authHeader);
+    return profile;
   }
 }
 

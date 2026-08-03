@@ -1,25 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase/admin';
-import { MembershipRecord, FavoriteRecord } from '@/server/types/supabase.types';
-
-export class MembershipRepository {
-  async findActiveByUserId(userId: string): Promise<MembershipRecord | null> {
-    const { data } = await supabaseAdmin
-      .from('memberships')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('status', 'ACTIVE')
-      .gt('expiry_date', new Date().toISOString())
-      .single();
-
-    return data ? (data as MembershipRecord) : null;
-  }
-
-  async decrementQuota(membershipId: string): Promise<void> {
-    try {
-      await supabaseAdmin.rpc('decrement_membership_quota', { m_id: membershipId });
-    } catch (err) {}
-  }
-}
+import { FavoriteRecord } from '@/server/types/supabase.types';
 
 export class FavoriteRepository {
   async getUserFavorites(userId: string): Promise<FavoriteRecord[]> {
@@ -51,5 +31,4 @@ export class FavoriteRepository {
   }
 }
 
-export const membershipRepository = new MembershipRepository();
 export const favoriteRepository = new FavoriteRepository();

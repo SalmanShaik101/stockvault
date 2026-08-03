@@ -1,31 +1,5 @@
 import { supabaseAdmin } from '@/lib/supabase/admin';
-import { OrderRecord, UserLibraryRecord } from '@/server/types/supabase.types';
-
-export class OrderRepository {
-  async create(order: Partial<OrderRecord>): Promise<OrderRecord> {
-    const { data, error } = await supabaseAdmin
-      .from('orders')
-      .insert(order)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Error creating order:', error);
-      return order as OrderRecord;
-    }
-    return data as OrderRecord;
-  }
-
-  async findByOrderId(orderId: string): Promise<OrderRecord | null> {
-    const { data } = await supabaseAdmin
-      .from('orders')
-      .select('*')
-      .eq('order_id', orderId)
-      .single();
-
-    return data ? (data as OrderRecord) : null;
-  }
-}
+import { UserLibraryRecord } from '@/server/types/supabase.types';
 
 export class LibraryRepository {
   async addToLibrary(userId: string, productId: string, orderId?: string): Promise<UserLibraryRecord> {
@@ -71,5 +45,4 @@ export class LibraryRepository {
   }
 }
 
-export const orderRepository = new OrderRepository();
 export const libraryRepository = new LibraryRepository();

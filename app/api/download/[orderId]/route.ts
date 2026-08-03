@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authService } from '@/server/services/auth.service';
 import { downloadService } from '@/server/services/download.service';
-import { Readable } from 'stream';
 
 export async function GET(
   req: NextRequest,
@@ -12,12 +11,12 @@ export async function GET(
     const authHeader = req.headers.get('Authorization');
     const user = await authService.verifyToken(authHeader);
 
-    const ipAddress = req.headers.get('x-forwarded-for') || '127.0.0.1';
-    const userAgent = req.headers.get('user-agent') || 'browser';
+    const ipAddress = req.headers.get('x-forwarded-for') || null;
+    const userAgent = req.headers.get('user-agent') || null;
 
     const { stream, product } = await downloadService.processDownloadStream(
       orderId,
-      user.uid,
+      user.id,
       ipAddress,
       userAgent
     );
