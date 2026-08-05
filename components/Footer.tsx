@@ -65,12 +65,27 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-zinc-500">
+        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-zinc-400">
           <p>© 2026 StockVault Inc. All rights reserved. Powered by Next.js & Google Drive API v3.</p>
-          <div className="flex items-center gap-4">
-            <Link href="/privacy" className="hover:text-zinc-300 transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-zinc-300 transition-colors">Terms of Service</Link>
-            <Link href="/refund" className="hover:text-zinc-300 transition-colors">No Refund Policy</Link>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link 
+              href="/privacy" 
+              className="px-3.5 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.15] text-zinc-200 hover:text-white border border-white/15 hover:border-white/40 font-medium transition-all shadow-sm"
+            >
+              Privacy Policy
+            </Link>
+            <Link 
+              href="/terms" 
+              className="px-3.5 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.15] text-zinc-200 hover:text-white border border-white/15 hover:border-white/40 font-medium transition-all shadow-sm"
+            >
+              Terms of Service
+            </Link>
+            <Link 
+              href="/refund" 
+              className="px-3.5 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.15] text-amber-300 hover:text-amber-200 border border-amber-500/30 hover:border-amber-500/60 font-medium transition-all shadow-sm"
+            >
+              No Refund Policy
+            </Link>
           </div>
         </div>
       </div>
