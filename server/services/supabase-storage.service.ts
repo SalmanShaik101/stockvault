@@ -2,7 +2,7 @@ import { supabaseAdmin } from '@/lib/supabase/admin';
 import { AppError } from '@/server/utils/custom-errors';
 
 export class SupabaseStorageService {
-  private bucketName = 'stockvault-assets';
+  private bucketName = 'stockvault';
 
   async uploadMedia(
     fileBuffer: Buffer,
