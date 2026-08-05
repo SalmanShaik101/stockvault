@@ -40,7 +40,7 @@ function FloatingPaths({ position }: { position: number }) {
                         }}
                         transition={{
                             duration: 35 + (path.id % 6) * 5,
-                            repeat: Number.POSITIVE_INFINITY,
+                            repeat: Infinity,
                             ease: "linear",
                         }}
                     />
@@ -57,13 +57,22 @@ export function BackgroundPaths({
     title?: string;
     children?: React.ReactNode;
 }) {
+    const [mounted, setMounted] = React.useState(false);
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
+
     const words = title.split(" ");
 
     return (
         <div className="relative min-h-[550px] w-full flex items-center justify-center overflow-hidden bg-[#070709] border-b border-white/10 py-12">
             <div className="absolute inset-0 opacity-100">
-                <FloatingPaths position={1} />
-                <FloatingPaths position={-1} />
+                {mounted && (
+                    <>
+                        <FloatingPaths position={1} />
+                        <FloatingPaths position={-1} />
+                    </>
+                )}
             </div>
 
             <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
