@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sync-drive": "node scripts/upload-to-gdrive.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.23",
