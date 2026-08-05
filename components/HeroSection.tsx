@@ -1,33 +1,21 @@
 'use client';
 
 import React from 'react';
-import DataGridHero from '@/components/ui/data-grid-hero';
+import { BackgroundPaths } from '@/components/ui/background-paths';
 import { Compass, Shield, Gauge, ArrowDownRight, Layers, Cpu, Award } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="relative overflow-hidden py-6">
-      <DataGridHero
-        rows={12}
-        cols={24}
-        spacing={5}
-        duration={3.5}
-        color="#818cf8"
-        animationType="pulse"
-        pulseEffect={true}
-        mouseGlow={true}
-        opacityMin={0.03}
-        opacityMax={0.45}
-        background="transparent"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center py-10">
+    <section className="relative overflow-hidden">
+      <BackgroundPaths title="StockVault Pro">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center py-6">
           
           {/* Top Pill */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/25 text-white text-xs font-medium mb-6 backdrop-blur-md shadow-lg">
             <Compass className="w-3.5 h-3.5 text-indigo-400" strokeWidth={1.5} />
             <span>Curated 5TB Digital Stock Vault</span>
             <span className="w-1 h-1 rounded-full bg-zinc-500" />
-            <span className="text-zinc-300">Generative Spatial Grid Edition</span>
+            <span className="text-zinc-300">Animated Vector Paths Edition</span>
           </div>
 
           {/* Hero Title */}
@@ -83,7 +71,7 @@ export const HeroSection: React.FC = () => {
           </div>
 
         </div>
-      </DataGridHero>
+      </BackgroundPaths>
     </section>
   );
 };
