@@ -53,7 +53,7 @@ export default function NoRefundPolicyPage() {
               100% Download Guarantee:
             </p>
             <p>
-              If you experience any issue downloading your files or encounter a broken Google Drive link, our support team will replace your link or fix access within 24 hours. Contact us at <span className="text-purple-300 underline font-mono">support@stockvault.pro</span>.
+              If you experience any issue downloading your files or encounter a broken Google Drive link, our support team will replace your link or fix access within 24 hours. Contact us at <a href="mailto:samsupport0@gmail.com" className="text-purple-300 underline font-mono">samsupport0@gmail.com</a>.
             </p>
           </section>
         </div>

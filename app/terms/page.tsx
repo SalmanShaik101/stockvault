@@ -52,7 +52,7 @@ export default function TermsOfServicePage() {
           <section className="space-y-2">
             <h2 className="text-base font-bold text-white">5. Governing Law</h2>
             <p>
-              These terms are governed by the laws of India. Any legal inquiries can be sent to <span className="text-purple-300 underline font-mono">legal@stockvault.pro</span>.
+              These terms are governed by the laws of India. Any legal inquiries can be sent to <a href="mailto:samsupport0@gmail.com" className="text-purple-300 underline font-mono">samsupport0@gmail.com</a>.
             </p>
           </section>
         </div>

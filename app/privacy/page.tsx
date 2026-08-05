@@ -52,7 +52,7 @@ export default function PrivacyPolicyPage() {
           <section className="space-y-2">
             <h2 className="text-base font-bold text-white">5. Contact Support</h2>
             <p>
-              If you have any questions regarding your data privacy, feel free to contact our support team at <span className="text-purple-300 underline font-mono">support@stockvault.pro</span>.
+              If you have any questions regarding your data privacy, feel free to contact our support team at <a href="mailto:samsupport0@gmail.com" className="text-purple-300 underline font-mono">samsupport0@gmail.com</a>.
             </p>
           </section>
         </div>
