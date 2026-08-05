@@ -1,5 +1,3 @@
-import nodemailer from 'nodemailer';
-
 export interface OrderEmailPayload {
   toEmail: string;
   customerName?: string;
@@ -10,115 +8,63 @@ export interface OrderEmailPayload {
 }
 
 export class EmailService {
-  private transporter: nodemailer.Transporter | null = null;
-
-  constructor() {
-    const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
-    const smtpPort = Number(process.env.SMTP_PORT) || 587;
-    const smtpUser = process.env.SMTP_USER || process.env.GMAIL_USER || 'samsupport0@gmail.com';
-    const smtpPass = process.env.SMTP_PASS || process.env.GMAIL_APP_PASSWORD;
-
-    if (smtpPass) {
-      this.transporter = nodemailer.createTransport({
-        host: smtpHost,
-        port: smtpPort,
-        secure: smtpPort === 465,
-        auth: {
-          user: smtpUser,
-          pass: smtpPass,
-        },
-      });
-    }
-  }
-
   async sendOrderConfirmationEmail(payload: OrderEmailPayload): Promise<boolean> {
     const { toEmail, customerName = 'Valued Creator', productTitle, orderId, amount, downloadUrl } = payload;
 
-    const emailHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #050507; color: #ffffff; margin: 0; padding: 0; }
-          .container { max-width: 600px; margin: 40px auto; background-color: #0c0c0e; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; overflow: hidden; padding: 32px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-          .header { text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 20px; margin-bottom: 24px; }
-          .logo { font-size: 22px; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; }
-          .badge { display: inline-block; background-color: #10b981; color: #ffffff; padding: 6px 14px; border-radius: 50px; font-size: 12px; font-weight: bold; margin-top: 10px; }
-          .title { font-size: 20px; font-weight: 800; color: #ffffff; margin-bottom: 8px; }
-          .subtitle { font-size: 14px; color: #a1a1aa; line-height: 1.6; margin-bottom: 24px; }
-          .order-box { background-color: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 20px; margin-bottom: 24px; font-size: 13px; }
-          .order-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
-          .order-row:last-child { border-bottom: none; }
-          .label { color: #a1a1aa; }
-          .value { color: #ffffff; font-weight: bold; }
-          .btn-container { text-align: center; margin: 32px 0; }
-          .btn { display: inline-block; background-color: #ffffff; color: #000000; font-size: 14px; font-weight: 800; text-decoration: none; padding: 16px 36px; border-radius: 14px; box-shadow: 0 0 25px rgba(255, 255, 255, 0.3); }
-          .footer { text-align: center; font-size: 11px; color: #71717a; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 20px; margin-top: 32px; }
-          .contact { color: #c084fc; text-decoration: underline; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <div class="logo">StockVault PRO</div>
-            <div class="badge">✓ Order Successful</div>
-          </div>
+    const emailApiKey = process.env.RESEND_API_KEY || process.env.EMAIL_API_KEY;
 
-          <div class="title">Thank You For Your Purchase, ${customerName}!</div>
-          <div class="subtitle">
-            Your payment of <strong>₹${amount}</strong> was received successfully. Your 4K stock video bundle is ready for instant download via direct Google Drive access below.
-          </div>
+    if (emailApiKey) {
+      try {
+        const response = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${emailApiKey}`,
+          },
+          body: JSON.stringify({
+            from: 'StockVault PRO <onboarding@resend.dev>',
+            to: [toEmail],
+            subject: `🎉 Order Receipt: Thank You For Buying ${productTitle}!`,
+            html: `
+              <div style="font-family: system-ui, -apple-system, sans-serif; background-color: #050507; color: #ffffff; padding: 32px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.15); max-width: 550px; margin: 0 auto;">
+                <div style="text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 16px; margin-bottom: 24px;">
+                  <h1 style="font-size: 24px; font-weight: 900; margin: 0; color: #ffffff;">StockVault PRO</h1>
+                  <span style="background-color: #10b981; color: #ffffff; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; display: inline-block; margin-top: 8px;">✓ Order Successful</span>
+                </div>
 
-          <div class="order-box">
-            <div class="order-row">
-              <span class="label">Product Purchased:</span>
-              <span class="value">${productTitle}</span>
-            </div>
-            <div class="order-row">
-              <span class="label">Order ID:</span>
-              <span class="value">${orderId}</span>
-            </div>
-            <div class="order-row">
-              <span class="label">Amount Paid:</span>
-              <span class="value">₹${amount}</span>
-            </div>
-            <div class="order-row">
-              <span class="label">Commercial License:</span>
-              <span class="value" style="color:#10b981;">Included</span>
-            </div>
-          </div>
+                <h2 style="font-size: 18px; font-weight: 800; color: #ffffff; margin-bottom: 12px;">Thank You For Your Purchase, ${customerName}!</h2>
+                <p style="font-size: 13px; color: #a1a1aa; line-height: 1.6;">
+                  Your payment of <strong>₹${amount}</strong> was received successfully. Your 4K stock video bundle is ready for instant download below.
+                </p>
 
-          <div class="btn-container">
-            <a href="${downloadUrl}" class="btn">🚀 Download Your Stock Vault Now</a>
-          </div>
+                <div style="background-color: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; margin: 20px 0; font-size: 12px;">
+                  <p style="margin: 4px 0;"><strong>Product:</strong> ${productTitle}</p>
+                  <p style="margin: 4px 0;"><strong>Order ID:</strong> ${orderId}</p>
+                  <p style="margin: 4px 0;"><strong>Amount Paid:</strong> ₹${amount}</p>
+                  <p style="margin: 4px 0; color: #10b981;"><strong>Commercial License:</strong> Included</p>
+                </div>
 
-          <div class="footer">
-            If you need technical assistance or custom footage requests, email us anytime at <a href="mailto:samsupport0@gmail.com" class="contact">samsupport0@gmail.com</a>.<br><br>
-            © 2026 StockVault Inc. All rights reserved.
-          </div>
-        </div>
-      </body>
-      </html>
-    `;
+                <div style="text-align: center; margin: 28px 0;">
+                  <a href="${downloadUrl}" style="background-color: #ffffff; color: #000000; font-size: 13px; font-weight: 800; text-decoration: none; padding: 14px 28px; border-radius: 12px; display: inline-block;">🚀 Download Your Stock Vault Now</a>
+                </div>
 
-    try {
-      if (this.transporter) {
-        await this.transporter.sendMail({
-          from: `"StockVault PRO" <samsupport0@gmail.com>`,
-          to: toEmail,
-          subject: `🎉 Order Receipt: Thank You For Buying ${productTitle}!`,
-          html: emailHtml,
+                <div style="text-align: center; font-size: 11px; color: #71717a; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px; margin-top: 24px;">
+                  Need support or have broken links? Contact <a href="mailto:samsupport0@gmail.com" style="color: #c084fc;">samsupport0@gmail.com</a>.<br>
+                  © 2026 StockVault Inc. All rights reserved.
+                </div>
+              </div>
+            `,
+          }),
         });
-        return true;
-      } else {
-        console.log(`[EMAIL SERVICE] Order confirmation mock sent to ${toEmail} for order ${orderId}`);
-        return true;
+        return response.ok;
+      } catch (err) {
+        console.error('[EMAIL DISPATCH ERROR]', err);
+        return false;
       }
-    } catch (error) {
-      console.error('[EMAIL SERVICE ERROR]', error);
-      return false;
     }
+
+    console.log(`[EMAIL DISPATCH] Mock order confirmation dispatched to ${toEmail} for order ${orderId}`);
+    return true;
   }
 }
 
