@@ -1,77 +1,86 @@
 'use client';
 
 import React from 'react';
-import { BackgroundPaths } from '@/components/ui/background-paths';
 import { Compass, Shield, Gauge, ArrowDownRight, Layers, Cpu, Award } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="relative overflow-hidden">
-      <BackgroundPaths title="StockVault Pro">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center py-6">
-          
-          {/* Top Pill */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/25 text-white text-xs font-medium mb-6 backdrop-blur-md shadow-lg">
-            <Compass className="w-3.5 h-3.5 text-indigo-400" strokeWidth={1.5} />
-            <span>Curated 5TB Digital Stock Vault</span>
-            <span className="w-1 h-1 rounded-full bg-zinc-500" />
-            <span className="text-zinc-300">Animated Vector Paths Edition</span>
-          </div>
+    <section className="relative overflow-hidden py-12 sm:py-20 my-4 rounded-3xl mx-4 sm:mx-8 border border-purple-500/20 shadow-2xl bg-gradient-to-b from-[#08060d] via-[#120a24] to-[#250d4d]">
+      
+      {/* Deep Purple Radial Ambient Spotlight Glow */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at 50% 120%, rgba(147, 51, 234, 0.45) 0%, rgba(88, 28, 135, 0.25) 45%, rgba(8, 6, 13, 0) 80%)'
+        }}
+      />
 
-          {/* Hero Title */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white max-w-4xl mx-auto leading-[1.1] mb-6 drop-shadow-2xl">
-            Premium HD Video Bundles <br className="hidden sm:inline" />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-indigo-400">
-              For Viral Creators & Editors
-            </span>
-          </h1>
+      {/* Subtle Purple Specular Lighting */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-purple-600/20 blur-[130px] rounded-full pointer-events-none" />
 
-          {/* Hero Subtitle */}
-          <p className="text-base sm:text-lg text-zinc-300 max-w-2xl mx-auto leading-relaxed mb-8 font-normal drop-shadow-md">
-            Instant lifetime download access to curated 4K reels, gym aesthetics, motivational speech edits, luxury supercars, and AI motion clips. Zero watermarks, royalty-free.
-          </p>
-
-          {/* Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
-            <a
-              href="#catalog"
-              className="glass-button-primary px-7 py-3.5 rounded-2xl text-sm font-bold text-black flex items-center gap-2 shadow-xl hover:scale-105 transition-all"
-            >
-              <ArrowDownRight className="w-4 h-4 text-black" strokeWidth={2} />
-              <span>Explore Catalog (10,000+ Clips)</span>
-            </a>
-
-            <a
-              href="#pricing"
-              className="px-7 py-3.5 rounded-2xl text-sm font-bold text-white bg-white/[0.08] hover:bg-white/[0.15] border border-white/25 hover:border-white/50 backdrop-blur-md transition-all flex items-center gap-2 shadow-lg"
-            >
-              <Gauge className="w-4 h-4 text-indigo-400" strokeWidth={1.5} />
-              <span>Unlimited Pass ₹299/mo</span>
-            </a>
-          </div>
-
-          {/* Trust Badges */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto pt-6 border-t border-white/15 text-xs font-medium text-zinc-300">
-            <div className="flex items-center justify-center gap-2 p-3 rounded-2xl bg-white/[0.04] border border-white/15 backdrop-blur-md shadow-sm">
-              <Shield className="w-4 h-4 text-indigo-400" strokeWidth={1.5} />
-              <span>Instant Zip Downloads</span>
-            </div>
-            <div className="flex items-center justify-center gap-2 p-3 rounded-2xl bg-white/[0.04] border border-white/15 backdrop-blur-md shadow-sm">
-              <Cpu className="w-4 h-4 text-indigo-400" strokeWidth={1.5} />
-              <span>Direct Google Drive API</span>
-            </div>
-            <div className="flex items-center justify-center gap-2 p-3 rounded-2xl bg-white/[0.04] border border-white/15 backdrop-blur-md shadow-sm">
-              <Layers className="w-4 h-4 text-indigo-400" strokeWidth={1.5} />
-              <span>Commercial Use License</span>
-            </div>
-            <div className="flex items-center justify-center gap-2 p-3 rounded-2xl bg-white/[0.04] border border-white/15 backdrop-blur-md shadow-sm">
-              <Award className="w-4 h-4 text-indigo-400" strokeWidth={1.5} />
-              <span>Unwatermarked Assets</span>
-            </div>
-          </div>
-
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        
+        {/* Top Pill */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-950/60 border border-purple-500/30 text-white text-xs font-medium mb-8 backdrop-blur-xl shadow-lg">
+          <Compass className="w-3.5 h-3.5 text-purple-300" strokeWidth={1.5} />
+          <span>Curated 5TB Digital Stock Vault</span>
+          <span className="w-1 h-1 rounded-full bg-purple-400" />
+          <span className="text-purple-200">Purple Velvet Edition</span>
         </div>
-      </BackgroundPaths>
+
+        {/* Hero Title */}
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white max-w-4xl mx-auto leading-[1.1] mb-6 drop-shadow-2xl">
+          Premium HD Video Bundles <br className="hidden sm:inline" />
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-200 to-purple-400">
+            For Viral Creators & Editors
+          </span>
+        </h1>
+
+        {/* Hero Subtitle */}
+        <p className="text-base sm:text-lg text-purple-100/80 max-w-2xl mx-auto leading-relaxed mb-10 font-normal drop-shadow">
+          Instant lifetime download access to curated 4K reels, gym aesthetics, motivational speech edits, luxury supercars, and AI motion clips. Zero watermarks, royalty-free.
+        </p>
+
+        {/* Action Buttons */}
+        <div className="flex flex-wrap items-center justify-center gap-4 mb-14">
+          <a
+            href="#catalog"
+            className="glass-button-primary px-8 py-4 rounded-2xl text-sm font-bold text-black flex items-center gap-2 shadow-2xl hover:scale-105 transition-all"
+          >
+            <ArrowDownRight className="w-4 h-4 text-black" strokeWidth={2} />
+            <span>Explore Catalog (10,000+ Clips)</span>
+          </a>
+
+          <a
+            href="#pricing"
+            className="px-8 py-4 rounded-2xl text-sm font-bold text-white bg-purple-950/50 hover:bg-purple-900/60 border border-purple-400/30 hover:border-purple-400/60 backdrop-blur-xl transition-all flex items-center gap-2 shadow-xl"
+          >
+            <Gauge className="w-4 h-4 text-purple-300" strokeWidth={1.5} />
+            <span>Unlimited Pass ₹299/mo</span>
+          </a>
+        </div>
+
+        {/* Trust Badges */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto pt-8 border-t border-purple-500/20 text-xs font-medium text-purple-200/80">
+          <div className="flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-purple-950/40 border border-purple-500/20 backdrop-blur-md shadow-sm">
+            <Shield className="w-4 h-4 text-purple-300" strokeWidth={1.5} />
+            <span>Instant Zip Downloads</span>
+          </div>
+          <div className="flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-purple-950/40 border border-purple-500/20 backdrop-blur-md shadow-sm">
+            <Cpu className="w-4 h-4 text-purple-300" strokeWidth={1.5} />
+            <span>Direct Google Drive API</span>
+          </div>
+          <div className="flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-purple-950/40 border border-purple-500/20 backdrop-blur-md shadow-sm">
+            <Layers className="w-4 h-4 text-purple-300" strokeWidth={1.5} />
+            <span>Commercial Use License</span>
+          </div>
+          <div className="flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-purple-950/40 border border-purple-500/20 backdrop-blur-md shadow-sm">
+            <Award className="w-4 h-4 text-purple-300" strokeWidth={1.5} />
+            <span>Unwatermarked Assets</span>
+          </div>
+        </div>
+
+      </div>
     </section>
   );
 };
