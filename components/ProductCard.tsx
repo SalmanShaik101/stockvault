@@ -4,6 +4,7 @@ import React, { useState, useRef } from 'react';
 import { Product } from '@/types';
 import { Play, ArrowDown, Star, Clapperboard, Disc, CheckCircle, Maximize2 } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
+import { AnimatedBuyButton } from '@/components/ui/animated-buy-button';
 
 interface ProductCardProps {
   product: Product;
@@ -138,13 +139,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onPreview, on
               <Maximize2 className="w-3.5 h-3.5" strokeWidth={1.25} />
             </button>
 
-            <button
+            <AnimatedBuyButton
+              price={product.price}
+              label="Buy Bundle"
               onClick={() => onBuyNow(product)}
-              className="glass-button-primary px-3.5 py-2 rounded-xl text-xs font-bold text-black flex items-center gap-1.5 shadow-md"
-            >
-              <ArrowDown className="w-3.5 h-3.5" strokeWidth={1.5} />
-              <span>Buy Bundle</span>
-            </button>
+            />
           </div>
         </div>
 
