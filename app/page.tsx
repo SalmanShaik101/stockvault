@@ -8,29 +8,24 @@ import { ProductCard } from '@/components/ProductCard';
 import { ProductPreviewModal } from '@/components/ProductPreviewModal';
 import { Footer } from '@/components/Footer';
 import { Category, Product } from '@/types';
-import { Sparkles, Check, HelpCircle, Loader2 } from 'lucide-react';
+import { MOCK_PRODUCTS } from '@/lib/mockData';
+import { Sparkles, Check, HelpCircle, Loader2, Flame } from 'lucide-react';
 
 const CATEGORIES: Category[] = [
-  { id: 'cat_all', name: 'All Bundles', slug: 'all', description: 'Complete stock video catalog', iconName: 'Sparkles', count: 27 },
-  { id: 'cat_gym', name: 'Gym & Fitness', slug: 'gym', description: 'Bodybuilding & workout reels', iconName: 'Dumbbell', count: 5 },
-  { id: 'cat_motivation', name: 'Motivation & Mindset', slug: 'motivation', description: 'Cinematic speech reels', iconName: 'Zap', count: 4 },
-  { id: 'cat_cars', name: 'Cars & Supercars', slug: 'cars', description: '4K hypercar reels', iconName: 'Car', count: 4 },
-  { id: 'cat_luxury', name: 'Luxury & Lifestyle', slug: 'luxury', description: 'Penthouse & yacht footage', iconName: 'Crown', count: 4 },
-  { id: 'cat_ai', name: 'AI & Futuristic', slug: 'ai', description: 'Cyberpunk visuals', iconName: 'Cpu', count: 5 },
-  { id: 'cat_kids', name: 'Kids & Learning', slug: 'kids', description: '3D educational reels', iconName: 'Smile', count: 3 },
-  { id: 'cat_comedy', name: 'Comedy & Memes', slug: 'comedy', description: 'Viral funny edits', iconName: 'Laugh', count: 2 },
+  { id: 'cat_all', name: '🔥 Trending Vaults', slug: 'all', description: 'Most viral 4K stock video collections', iconName: 'Sparkles', count: 2 },
+  { id: 'cat_cars', name: '🏎️ Supercars 4K', slug: 'cars', description: 'Hypercars & JDM 4K reels', iconName: 'Car', count: 2 },
+  { id: 'cat_popular', name: '👑 Most Purchased', slug: 'cars', description: 'Top selling bundles', iconName: 'Crown', count: 2 },
 ];
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS);
+  const [loading, setLoading] = useState(false);
   const [previewProduct, setPreviewProduct] = useState<Product | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchProducts() {
-      setLoading(true);
       try {
         const query = selectedCategory !== 'all' ? `?category=${selectedCategory}` : '';
         const res = await fetch(`/api/products${query}`);
@@ -39,16 +34,10 @@ export default function Home() {
         if (json.data && Array.isArray(json.data) && json.data.length > 0) {
           setProducts(json.data);
         } else {
-          const resAll = await fetch('/api/products');
-          const jsonAll = await resAll.json();
-          if (jsonAll.data && Array.isArray(jsonAll.data)) {
-            setProducts(jsonAll.data);
-          }
+          setProducts(MOCK_PRODUCTS);
         }
       } catch (err) {
-        console.error('Failed to fetch products:', err);
-      } finally {
-        setLoading(false);
+        setProducts(MOCK_PRODUCTS);
       }
     }
 
@@ -87,14 +76,15 @@ export default function Home() {
       {/* Marketplace Catalog Section */}
       <main id="catalog" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-8">
         
-        {/* Category Header */}
+        {/* Category Header with Trending Options */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
-              Browse Stock Vaults
+            <h2 className="text-2xl sm:text-3xl font-black text-white flex items-center gap-2">
+              <span>Explore Stock Vaults</span>
+              <Flame className="w-6 h-6 text-amber-400 fill-amber-400" />
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400 mt-1">
-              Select a category below to explore unwatermarked 4K and 9:16 vertical video packs.
+              Select a category to view 4K Ultra HD unwatermarked video bundles with AI Quality Audit Ratings.
             </p>
           </div>
 
@@ -141,13 +131,13 @@ export default function Home() {
               </h2>
 
               <p className="text-sm text-zinc-400 max-w-xl mx-auto">
-                Gain instant access to all 5TB of Gym, Supercar, Motivation, Luxury, and AI reels with zero daily limits.
+                Gain instant access to all Supercar, Gym, Motivation, Luxury, and AI reels with zero daily limits.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left max-w-2xl mx-auto text-xs text-zinc-300 pt-4">
                 <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.03] border border-white/10">
                   <Check className="w-4 h-4 text-white shrink-0" />
-                  <span>Unlimited 5TB Bundle Access</span>
+                  <span>Unlimited Vault Access</span>
                 </div>
                 <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.03] border border-white/10">
                   <Check className="w-4 h-4 text-white shrink-0" />
@@ -191,16 +181,16 @@ export default function Home() {
               </div>
 
               <div className="p-5 rounded-2xl glass-card space-y-2">
-                <h4 className="font-bold text-sm text-white">Can I use these reels for Instagram, YouTube, and TikTok monetization?</h4>
+                <h4 className="font-bold text-sm text-white">What are StockAI Quality Audit Scores (5.0★ / 4.9★ / 4.8★)?</h4>
                 <p className="text-xs text-zinc-400 leading-relaxed">
-                  Yes, 100%! Every bundle includes a royalty-free commercial editing license. You can freely edit, add music, monetize, and publish on social media or client videos.
+                  Our StockAI Video Auditor analyzes every video bundle for 4K pixel clarity, retention rate, color grading, and viral potential before publishing.
                 </p>
               </div>
 
               <div className="p-5 rounded-2xl glass-card space-y-2">
-                <h4 className="font-bold text-sm text-white">What if a Google Drive link is broken or slow?</h4>
+                <h4 className="font-bold text-sm text-white">Can I use these reels for Instagram, YouTube, and TikTok monetization?</h4>
                 <p className="text-xs text-zinc-400 leading-relaxed">
-                  All files are backed up on Google Drive enterprise servers. If you encounter any download issue, our automated API fallback delivers your files instantly from server mirrors.
+                  Yes, 100%! Every bundle includes a royalty-free commercial editing license. You can freely edit, add music, monetize, and publish on social media or client videos.
                 </p>
               </div>
             </div>
