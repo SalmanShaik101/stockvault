@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'StockVault — Premium 5TB Digital Video Stock Marketplace',
-  description: 'Instant download access to curated 4K reels, gym aesthetics, supercars, motivation, and AI video bundles with commercial license.',
+  title: 'StockVault PRO',
+  description: 'Instant download access to curated 4K reels, supercars, motivation, and stock video bundles with commercial license.',
 };
 
 export default function RootLayout({
