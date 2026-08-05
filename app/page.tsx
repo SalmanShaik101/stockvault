@@ -1,30 +1,61 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { HeroSection } from '@/components/HeroSection';
 import { CategoryFilterBar } from '@/components/CategoryFilterBar';
 import { ProductCard } from '@/components/ProductCard';
 import { ProductPreviewModal } from '@/components/ProductPreviewModal';
 import { Footer } from '@/components/Footer';
-import { MOCK_CATEGORIES, MOCK_PRODUCTS } from '@/lib/mockData';
-import { Product } from '@/types';
-import { Sparkles, Check, HelpCircle } from 'lucide-react';
+import { Category, Product } from '@/types';
+import { Sparkles, Check, HelpCircle, Loader2 } from 'lucide-react';
+
+const CATEGORIES: Category[] = [
+  { id: 'cat_all', name: 'All Bundles', slug: 'all', description: 'Complete stock video catalog', iconName: 'Sparkles', count: 27 },
+  { id: 'cat_gym', name: 'Gym & Fitness', slug: 'gym', description: 'Bodybuilding & workout reels', iconName: 'Dumbbell', count: 5 },
+  { id: 'cat_motivation', name: 'Motivation & Mindset', slug: 'motivation', description: 'Cinematic speech reels', iconName: 'Zap', count: 4 },
+  { id: 'cat_cars', name: 'Cars & Supercars', slug: 'cars', description: '4K hypercar reels', iconName: 'Car', count: 4 },
+  { id: 'cat_luxury', name: 'Luxury & Lifestyle', slug: 'luxury', description: 'Penthouse & yacht footage', iconName: 'Crown', count: 4 },
+  { id: 'cat_ai', name: 'AI & Futuristic', slug: 'ai', description: 'Cyberpunk visuals', iconName: 'Cpu', count: 5 },
+  { id: 'cat_kids', name: 'Kids & Learning', slug: 'kids', description: '3D educational reels', iconName: 'Smile', count: 3 },
+  { id: 'cat_comedy', name: 'Comedy & Memes', slug: 'comedy', description: 'Viral funny edits', iconName: 'Laugh', count: 2 },
+];
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [previewProduct, setPreviewProduct] = useState<Product | null>(null);
-  const [purchasingProduct, setPurchasingProduct] = useState<Product | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Filter products by selected category
-  const filteredProducts = selectedCategory === 'all'
-    ? MOCK_PRODUCTS
-    : MOCK_PRODUCTS.filter((p) => p.category.toLowerCase() === selectedCategory.toLowerCase());
+  useEffect(() => {
+    async function fetchProducts() {
+      setLoading(true);
+      try {
+        const query = selectedCategory !== 'all' ? `?category=${selectedCategory}` : '';
+        const res = await fetch(`/api/products${query}`);
+        const json = await res.json();
+        
+        if (json.data && Array.isArray(json.data) && json.data.length > 0) {
+          setProducts(json.data);
+        } else {
+          const resAll = await fetch('/api/products');
+          const jsonAll = await resAll.json();
+          if (jsonAll.data && Array.isArray(jsonAll.data)) {
+            setProducts(jsonAll.data);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch products:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, [selectedCategory]);
 
   const handleBuyNow = async (product: Product) => {
-    setPurchasingProduct(product);
-    
     try {
       const res = await fetch('/api/payments/create-order', {
         method: 'POST',
@@ -34,17 +65,15 @@ export default function Home() {
       const data = await res.json();
 
       if (data.success) {
-        setToastMessage(`🎉 Order initialized! Direct download for "${product.title}" is starting...`);
-        
+        setToastMessage(`🎉 Order initialized! Direct download for "${product.title}" starting...`);
         setTimeout(() => {
           window.location.href = `/api/download/${data.orderId || 'ord_101928374'}`;
         }, 1500);
       }
     } catch (err) {
-      setToastMessage('Failed to initialize checkout. Try again.');
+      setToastMessage('Failed to initialize checkout. Please try again.');
     } finally {
       setTimeout(() => setToastMessage(null), 5000);
-      setPurchasingProduct(null);
     }
   };
 
@@ -70,23 +99,30 @@ export default function Home() {
           </div>
 
           <CategoryFilterBar
-            categories={MOCK_CATEGORIES}
+            categories={CATEGORIES}
             selectedCategory={selectedCategory}
             onSelectCategory={setSelectedCategory}
           />
         </div>
 
         {/* Product Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onPreview={setPreviewProduct}
-              onBuyNow={handleBuyNow}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="py-20 flex flex-col items-center justify-center gap-3 text-zinc-400">
+            <Loader2 className="w-8 h-8 animate-spin text-purple-400" />
+            <span className="text-xs font-mono">Loading 4K Stock Vaults...</span>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onPreview={setPreviewProduct}
+                onBuyNow={handleBuyNow}
+              />
+            ))}
+          </div>
+        )}
 
         {/* Pricing / Pass Section */}
         <section id="pricing" className="pt-16 border-t border-white/10">
