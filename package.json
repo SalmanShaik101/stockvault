@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "sync-drive": "node scripts/upload-to-gdrive.mjs"
+    "sync-drive": "node scripts/upload-to-gdrive.mjs",
+    "sync-db": "node scripts/sync-supabase-from-gdrive.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.23",
