@@ -39,12 +39,11 @@ export const ProductPreviewModal: React.FC<ProductPreviewModalProps> = ({
           </button>
         </div>
 
-        {/* Video Preview Player */}
-        <div className="relative aspect-video w-full bg-black">
-          <video
-            src={product.previewVideoUrl}
-            controls
-            autoPlay
+        {/* Product Image Banner */}
+        <div className="relative aspect-video w-full bg-black border-b border-white/10 overflow-hidden">
+          <img
+            src={product.thumbnailUrl}
+            alt={product.title}
             className="w-full h-full object-contain"
           />
         </div>

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { Product } from '@/types';
-import { Play, Star, Clapperboard, Disc, CheckCircle, Maximize2 } from 'lucide-react';
+import { Star, Clapperboard, Disc, CheckCircle, Maximize2 } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import { AnimatedBuyButton } from '@/components/ui/animated-buy-button';
 
@@ -13,52 +13,17 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onPreview, onBuyNow }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {});
-    }
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    if (videoRef.current) {
-      videoRef.current.pause();
-    }
-  };
-
   return (
-    <div
-      className="glass-card rounded-2xl overflow-hidden flex flex-col group relative border border-white/15"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      {/* Thumbnail & Video Preview Overlay */}
-      <div className="relative aspect-[16/9] sm:aspect-[9/16] max-h-[360px] w-full overflow-hidden bg-black">
-        
-        {/* Static Image Thumbnail */}
+    <div className="glass-card rounded-2xl overflow-hidden flex flex-col group relative border border-white/15">
+      {/* Thumbnail Image Banner */}
+      <div 
+        onClick={() => onPreview(product)}
+        className="relative aspect-[16/9] sm:aspect-[9/16] max-h-[360px] w-full overflow-hidden bg-black cursor-pointer"
+      >
         <img
           src={product.thumbnailUrl}
           alt={product.title}
-          className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${
-            isHovered ? 'opacity-0' : 'opacity-100'
-          }`}
-        />
-
-        {/* Hover Silent Video Preview Player */}
-        <video
-          ref={videoRef}
-          src={product.previewVideoUrl}
-          muted
-          loop
-          playsInline
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
-            isHovered ? 'opacity-100' : 'opacity-0'
-          }`}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
 
         {/* Overlay Badges */}
@@ -72,23 +37,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onPreview, on
           </span>
         </div>
 
-        {/* Play Icon Trigger */}
-        <button
-          onClick={() => onPreview(product)}
-          className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-all cursor-pointer"
-        >
-          <div className="w-11 h-11 rounded-full bg-white text-black flex items-center justify-center shadow-xl shadow-white/20 group-hover:scale-110 transition-transform">
-            <Play className="w-4 h-4 fill-black translate-x-0.5" strokeWidth={1.5} />
-          </div>
-        </button>
-
         {/* Resolution Pill */}
         <div className="absolute bottom-3 left-3 z-10">
           <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-black/80 backdrop-blur-sm text-zinc-300 border border-white/15">
             {product.resolution}
           </span>
         </div>
-
       </div>
 
       {/* Card Content & Pricing */}
