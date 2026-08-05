@@ -90,40 +90,84 @@ export default function Home() {
 
         {/* Pricing / Pass Section */}
         <section id="pricing" className="pt-16 border-t border-white/10">
-          <div className="glass-panel rounded-3xl p-8 sm:p-12 relative overflow-hidden text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold mb-4 border border-white/20">
-              <Sparkles className="w-3.5 h-3.5 text-white" strokeWidth={1.5} />
-              <span>Unlimited Access Pass</span>
+          <div className="glass-panel rounded-3xl p-8 sm:p-12 relative overflow-hidden max-w-4xl mx-auto">
+            <div className="max-w-3xl mx-auto text-center space-y-6">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 text-white text-xs font-bold border border-white/20">
+                <Sparkles className="w-3.5 h-3.5" />
+                STOCKVAULT UNLIMITED ACCESS
+              </span>
+
+              <h2 className="text-3xl sm:text-5xl font-black text-white">
+                Download Everything For <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-white to-purple-400">
+                  Just ₹499 / Month
+                </span>
+              </h2>
+
+              <p className="text-sm text-zinc-400 max-w-xl mx-auto">
+                Gain instant access to all 5TB of Gym, Supercar, Motivation, Luxury, and AI reels with zero daily limits.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left max-w-2xl mx-auto text-xs text-zinc-300 pt-4">
+                <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.03] border border-white/10">
+                  <Check className="w-4 h-4 text-white shrink-0" />
+                  <span>Unlimited 5TB Bundle Access</span>
+                </div>
+                <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.03] border border-white/10">
+                  <Check className="w-4 h-4 text-white shrink-0" />
+                  <span>Google Drive Direct High-Speed</span>
+                </div>
+                <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.03] border border-white/10">
+                  <Check className="w-4 h-4 text-white shrink-0" />
+                  <span>Commercial Reseller License</span>
+                </div>
+              </div>
+
+              <div className="pt-4">
+                <a
+                  href="/pass"
+                  className="inline-block glass-button-primary px-8 py-4 rounded-2xl text-sm font-bold text-black hover:scale-105 transition-all shadow-xl"
+                >
+                  Start Unlimited Pass — ₹499/mo
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Accordion Section */}
+        <section className="py-12 border-t border-white/10">
+          <div className="max-w-3xl mx-auto space-y-6">
+            <div className="text-center space-y-2">
+              <h3 className="text-2xl font-bold text-white flex items-center justify-center gap-2">
+                <HelpCircle className="w-5 h-5 text-white" />
+                Frequently Asked Questions
+              </h3>
+              <p className="text-xs text-zinc-400">Everything you need to know about purchasing and downloading stock bundles.</p>
             </div>
 
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
-              Get Every Vault for ₹299/mo
-            </h2>
-            <p className="text-zinc-400 text-sm sm:text-base max-w-xl mx-auto mb-8">
-              Unlock unlimited high-speed downloads across all 10,000+ 4K reels, new weekly releases, and commercial editing licenses.
-            </p>
+            <div className="space-y-4">
+              <div className="p-5 rounded-2xl glass-card space-y-2">
+                <h4 className="font-bold text-sm text-white">How do I receive my downloaded files after payment?</h4>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  Immediately after your Razorpay payment succeeds, our backend system retrieves the Google Drive File ID (`driveFileId`) for your bundle and streams the private ZIP file directly to your browser or My Library portal.
+                </p>
+              </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left max-w-2xl mx-auto mb-8 text-xs text-zinc-300">
-              <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.03] border border-white/10">
-                <Check className="w-4 h-4 text-white" strokeWidth={1.5} />
-                <span>All 27+ Stock Vaults Included</span>
+              <div className="p-5 rounded-2xl glass-card space-y-2">
+                <h4 className="font-bold text-sm text-white">Can I use these reels for Instagram, YouTube, and TikTok monetization?</h4>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  Yes, 100%! Every bundle includes a royalty-free commercial editing license. You can freely edit, add music, monetize, and publish on social media or client videos.
+                </p>
               </div>
-              <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.03] border border-white/10">
-                <Check className="w-4 h-4 text-white" strokeWidth={1.5} />
-                <span>Unlimited Google Drive Downloads</span>
-              </div>
-              <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.03] border border-white/10">
-                <Check className="w-4 h-4 text-white" strokeWidth={1.5} />
-                <span>Cancel Anytime with 1 Click</span>
+
+              <div className="p-5 rounded-2xl glass-card space-y-2">
+                <h4 className="font-bold text-sm text-white">What if a Google Drive link is broken or slow?</h4>
+                <p className="text-xs text-zinc-400 leading-relaxed">
+                  All files are backed up on Google Drive enterprise servers. If you encounter any download issue, our automated API fallback delivers your files instantly from server mirrors.
+                </p>
               </div>
             </div>
-
-            <button
-              onClick={() => handleBuyNow(MOCK_PRODUCTS[0])}
-              className="glass-button-primary px-8 py-4 rounded-2xl text-sm font-bold text-black shadow-xl"
-            >
-              Start Unlimited Membership (₹299/mo)
-            </button>
           </div>
         </section>
 
