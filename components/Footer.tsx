@@ -39,7 +39,7 @@ export const Footer: React.FC = () => {
             <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Customer Portal</h4>
             <ul className="space-y-1.5 text-zinc-400">
               <li><Link href="/library" className="hover:text-white transition-colors">My Purchased Bundles</Link></li>
-              <li><Link href="/#pricing" className="hover:text-white transition-colors">Monthly Unlimited Pass</Link></li>
+              <li><Link href="/pass" className="hover:text-white transition-colors">Monthly Unlimited Pass (₹499/mo)</Link></li>
               <li><span className="text-zinc-500">Commercial License Included</span></li>
             </ul>
           </div>
@@ -68,9 +68,9 @@ export const Footer: React.FC = () => {
         <div className="pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-zinc-500">
           <p>© 2026 StockVault Inc. All rights reserved. Powered by Next.js & Google Drive API v3.</p>
           <div className="flex items-center gap-4">
-            <span className="hover:text-zinc-400 cursor-pointer">Privacy Policy</span>
-            <span className="hover:text-zinc-400 cursor-pointer">Terms of Service</span>
-            <span className="hover:text-zinc-400 cursor-pointer">Refund Policy</span>
+            <Link href="/privacy" className="hover:text-zinc-300 transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-zinc-300 transition-colors">Terms of Service</Link>
+            <Link href="/refund" className="hover:text-zinc-300 transition-colors">No Refund Policy</Link>
           </div>
         </div>
       </div>
