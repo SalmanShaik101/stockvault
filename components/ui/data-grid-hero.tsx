@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useRef } from "react";
-import PropTypes from "prop-types";
 
 interface DataGridHeroProps {
   rows?: number;
@@ -114,18 +113,3 @@ export default function DataGridHero({
     </div>
   );
 }
-
-DataGridHero.propTypes = {
-  rows: PropTypes.number,
-  cols: PropTypes.number,
-  spacing: PropTypes.number,
-  duration: PropTypes.number,
-  color: PropTypes.string,
-  animationType: PropTypes.oneOf(["pulse", "wave", "random"]),
-  pulseEffect: PropTypes.bool,
-  mouseGlow: PropTypes.bool,
-  opacityMin: PropTypes.number,
-  opacityMax: PropTypes.number,
-  background: PropTypes.string,
-  children: PropTypes.node,
-};
