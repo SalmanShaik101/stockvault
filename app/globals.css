@@ -96,3 +96,57 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #71717a;
 }
+
+/* DataGridHero Animated Cell & Grid System */
+.data-grid-hero {
+  position: relative;
+  width: 100%;
+  min-height: 480px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 30%, rgba(99, 102, 241, 0.12) 0%, rgba(5, 5, 7, 0.95) 75%);
+}
+
+.grid-container {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.15),
+    transparent 40%
+  );
+  opacity: var(--mouse-glow-opacity, 1);
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+}
+
+.grid-cell {
+  border-radius: 6px;
+  transition: background-color 0.4s ease, transform 0.4s ease;
+  will-change: opacity, transform;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+}
+
+@keyframes cell-pulse {
+  from {
+    opacity: var(--opacity-min, 0.05);
+    transform: scale(0.95);
+  }
+  to {
+    opacity: var(--opacity-max, 0.6);
+    transform: scale(1.05);
+  }
+}
