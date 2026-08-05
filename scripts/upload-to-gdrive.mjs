@@ -41,11 +41,21 @@ if (!GDRIVE_CLIENT_EMAIL || !GDRIVE_PRIVATE_KEY) {
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-const auth = new google.auth.JWT({
-  email: GDRIVE_CLIENT_EMAIL,
-  key: GDRIVE_PRIVATE_KEY,
-  scopes: ['https://www.googleapis.com/auth/drive'],
-});
+const jsonKeyPath = 'E:\\Downloads\\stockvault-drive-690dab4a92c9.json';
+let auth;
+if (fs.existsSync(jsonKeyPath)) {
+  console.log(`🔑 Using Google Service Account JSON key from: ${jsonKeyPath}`);
+  auth = new google.auth.GoogleAuth({
+    keyFile: jsonKeyPath,
+    scopes: ['https://www.googleapis.com/auth/drive'],
+  });
+} else {
+  auth = new google.auth.JWT({
+    email: GDRIVE_CLIENT_EMAIL,
+    key: GDRIVE_PRIVATE_KEY,
+    scopes: ['https://www.googleapis.com/auth/drive'],
+  });
+}
 
 const drive = google.drive({ version: 'v3', auth });
 
