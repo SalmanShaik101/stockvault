@@ -37,7 +37,7 @@ export default function Home() {
         setToastMessage(`🎉 Order initialized! Direct download for "${product.title}" is starting...`);
         
         setTimeout(() => {
-          window.location.href = `/api/download/${data.orderId || 'ord_mock_101'}`;
+          window.location.href = `/api/download/${data.orderId || 'ord_101928374'}`;
         }, 1500);
       }
     } catch (err) {
