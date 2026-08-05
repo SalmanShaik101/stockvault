@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Compass, Shield, Gauge, ArrowDownRight, Layers, Cpu, Award } from 'lucide-react';
+import { Shield, Gauge, ArrowDownRight, Layers, Cpu, Award } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
   return (
@@ -20,14 +20,6 @@ export const HeroSection: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         
-        {/* Top Pill */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-950/60 border border-purple-500/30 text-white text-xs font-medium mb-8 backdrop-blur-xl shadow-lg">
-          <Compass className="w-3.5 h-3.5 text-purple-300" strokeWidth={1.5} />
-          <span>Curated 5TB Digital Stock Vault</span>
-          <span className="w-1 h-1 rounded-full bg-purple-400" />
-          <span className="text-purple-200">Purple Velvet Edition</span>
-        </div>
-
         {/* Hero Title */}
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white max-w-4xl mx-auto leading-[1.1] mb-6 drop-shadow-2xl">
           Premium HD Video Bundles <br className="hidden sm:inline" />

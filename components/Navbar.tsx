@@ -16,11 +16,10 @@ export const Navbar: React.FC = () => {
           <div className="w-9 h-9 rounded-xl bg-white text-black flex items-center justify-center shadow-lg shadow-white/10 group-hover:scale-105 transition-transform duration-300">
             <Hexagon className="w-5 h-5 text-black" strokeWidth={1.5} />
           </div>
-          <div className="flex flex-col">
+          <div className="flex items-center">
             <span className="font-bold text-base tracking-tight text-white flex items-center gap-1.5">
               StockVault <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-zinc-300 border border-white/20 font-mono tracking-widest uppercase">PRO</span>
             </span>
-            <span className="text-[9px] text-zinc-400 tracking-widest uppercase font-mono">5TB Digital Media Vault</span>
           </div>
         </Link>
 
