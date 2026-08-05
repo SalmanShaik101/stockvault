@@ -3,10 +3,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowDown, Check, Loader2 } from 'lucide-react';
-import { formatCurrency } from '@/lib/utils';
 
 interface AnimatedBuyButtonProps {
-  price: number;
+  price?: number;
   label?: string;
   onClick: () => Promise<void> | void;
   className?: string;

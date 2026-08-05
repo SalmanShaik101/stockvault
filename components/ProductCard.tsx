@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import { Product } from '@/types';
-import { Play, ArrowDown, Star, Clapperboard, Disc, CheckCircle, Maximize2 } from 'lucide-react';
+import { Play, Star, Clapperboard, Disc, CheckCircle, Maximize2 } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import { AnimatedBuyButton } from '@/components/ui/animated-buy-button';
 
