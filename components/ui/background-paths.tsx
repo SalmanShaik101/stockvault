@@ -14,14 +14,13 @@ function FloatingPaths({ position }: { position: number }) {
         } ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${
             684 - i * 5 * position
         } ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
-        color: `rgba(255,255,255,${0.08 + i * 0.02})`,
-        width: 0.6 + i * 0.03,
+        width: 0.9 + i * 0.04,
     }));
 
     return (
         <div className="absolute inset-0 pointer-events-none">
             <svg
-                className="w-full h-full text-white/50"
+                className="w-full h-full text-white/70"
                 viewBox="0 0 696 316"
                 fill="none"
             >
@@ -32,15 +31,15 @@ function FloatingPaths({ position }: { position: number }) {
                         d={path.d}
                         stroke="currentColor"
                         strokeWidth={path.width}
-                        strokeOpacity={0.15 + path.id * 0.02}
-                        initial={{ pathLength: 0.3, opacity: 0.6 }}
+                        strokeOpacity={0.3 + path.id * 0.02}
+                        initial={{ pathLength: 0.4, opacity: 0.7 }}
                         animate={{
                             pathLength: 1,
-                            opacity: [0.3, 0.7, 0.3],
+                            opacity: [0.4, 0.85, 0.4],
                             pathOffset: [0, 1, 0],
                         }}
                         transition={{
-                            duration: 20 + Math.random() * 10,
+                            duration: 35 + (path.id % 6) * 5,
                             repeat: Number.POSITIVE_INFINITY,
                             ease: "linear",
                         }}
@@ -61,8 +60,8 @@ export function BackgroundPaths({
     const words = title.split(" ");
 
     return (
-        <div className="relative min-h-[520px] w-full flex items-center justify-center overflow-hidden bg-black/80 backdrop-blur-xl border-b border-white/10 py-12">
-            <div className="absolute inset-0 opacity-70">
+        <div className="relative min-h-[550px] w-full flex items-center justify-center overflow-hidden bg-[#070709] border-b border-white/10 py-12">
+            <div className="absolute inset-0 opacity-100">
                 <FloatingPaths position={1} />
                 <FloatingPaths position={-1} />
             </div>
