@@ -39,7 +39,6 @@ export const Footer: React.FC = () => {
             <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Customer Portal</h4>
             <ul className="space-y-1.5 text-zinc-400">
               <li><Link href="/library" className="hover:text-white transition-colors">My Purchased Bundles</Link></li>
-              <li><Link href="/admin/upload" className="hover:text-white transition-colors">Admin Upload Panel</Link></li>
               <li><Link href="/#pricing" className="hover:text-white transition-colors">Monthly Unlimited Pass</Link></li>
               <li><span className="text-zinc-500">Commercial License Included</span></li>
             </ul>
