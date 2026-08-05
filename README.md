@@ -3,10 +3,11 @@
 StockVault is a premium Next.js digital marketplace for 4K and 9:16 vertical stock video vaults, subscriptions, and instant direct downloads.
 
 ## 🚀 Deployment Status
+- **Live Production URL**: **[stockvault-umber.vercel.app](https://stockvault-umber.vercel.app)**
 - **Hosted Environment**: **Vercel** (Production)
 - **Database & Auth**: **Supabase Postgres & Supabase Auth**
 - **Public Assets Storage**: **Supabase Storage** (`stockvault` bucket)
-- **Heavy ZIP File Downloads**: **Google Drive API (Service Account Stream)**
+- **Heavy Video Vault Storage**: **Google Drive API (Folder Stream)**
 - **Payment Gateway**: **Razorpay**
 
 ---
