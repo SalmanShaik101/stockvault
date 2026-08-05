@@ -42,7 +42,7 @@ async function createDriveFolder(folderName, parentFolderId = '') {
   };
 
   const folder = await drive.files.create({
-    resource: fileMetadata,
+    requestBody: fileMetadata,
     fields: 'id',
   });
 
@@ -55,13 +55,19 @@ async function uploadFile(filePath, fileName, parentFolderId) {
     parents: [parentFolderId],
   };
 
+  const ext = path.extname(fileName).toLowerCase();
+  let mimeType = 'video/mp4';
+  if (ext === '.jpg' || ext === '.jpeg') mimeType = 'image/jpeg';
+  else if (ext === '.png') mimeType = 'image/png';
+  else if (ext === '.webp') mimeType = 'image/webp';
+
   const media = {
-    mimeType: 'video/mp4',
+    mimeType: mimeType,
     body: fs.createReadStream(filePath),
   };
 
   const response = await drive.files.create({
-    resource: fileMetadata,
+    requestBody: fileMetadata,
     media: media,
     fields: 'id',
   });
