@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Search, FolderArchive, ArrowUpRight, Hexagon, Command, Gem } from 'lucide-react';
+import { Search, FolderArchive, Hexagon, Command, Gem } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -46,14 +46,6 @@ export const Navbar: React.FC = () => {
           >
             <FolderArchive className="w-4 h-4 text-white" strokeWidth={1.25} />
             <span>My Library</span>
-          </Link>
-
-          <Link
-            href="/admin/upload"
-            className="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium text-zinc-400 hover:text-white hover:bg-white/[0.08] border border-transparent hover:border-white/15 transition-all"
-          >
-            <ArrowUpRight className="w-4 h-4 text-zinc-400" strokeWidth={1.25} />
-            <span>Admin Upload</span>
           </Link>
 
           <Link
