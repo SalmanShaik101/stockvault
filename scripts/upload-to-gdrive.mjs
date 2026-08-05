@@ -68,6 +68,8 @@ async function createDriveFolder(folderName, parentFolderId = '') {
 
   const folder = await drive.files.create({
     requestBody: fileMetadata,
+    supportsAllDrives: true,
+    supportsTeamDrives: true,
     fields: 'id',
   });
 
@@ -94,6 +96,8 @@ async function uploadFile(filePath, fileName, parentFolderId) {
   const response = await drive.files.create({
     requestBody: fileMetadata,
     media: media,
+    supportsAllDrives: true,
+    supportsTeamDrives: true,
     fields: 'id',
   });
 
