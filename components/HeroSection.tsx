@@ -44,11 +44,11 @@ export const HeroSection: React.FC = () => {
           </a>
 
           <a
-            href="#pricing"
+            href="/pass"
             className="px-8 py-4 rounded-2xl text-sm font-bold text-white bg-purple-950/50 hover:bg-purple-900/60 border border-purple-400/30 hover:border-purple-400/60 backdrop-blur-xl transition-all flex items-center gap-2 shadow-xl"
           >
             <Gauge className="w-4 h-4 text-purple-300" strokeWidth={1.5} />
-            <span>Unlimited Pass ₹299/mo</span>
+            <span>Unlimited Pass ₹499/mo</span>
           </a>
         </div>
 

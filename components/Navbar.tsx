@@ -49,7 +49,7 @@ export const Navbar: React.FC = () => {
           </Link>
 
           <Link
-            href="#pricing"
+            href="/pass"
             className="glass-button-primary px-4 py-2 rounded-xl text-xs font-bold text-black flex items-center gap-1.5"
           >
             <Gem className="w-3.5 h-3.5 text-black" strokeWidth={1.5} />
